@@ -1,16 +1,12 @@
 function narrate(math) {
-  return "narrated.";
+  return 'todo.';
 }
 
 function handle_input(tex) {
   $("body").css("cursor", "progress");
-  $.post("https://latexml.mathweb.org/convert", { // excplicitly unroll the fragment-html profile, as we want to add the math lexemes output on top
+  $.post("https://latexml.mathweb.org/convert", { // minimal latexml preloads for somewhat usual latex math
     "tex": tex,
-    "timeout": "10",
-    "format": "html5",
-    "whatsin": "math",
-    "whatsout": "math",
-    "pmml": "",
+    "timeout": "10", "format": "html5", "whatsin": "math", "whatsout": "math", "pmml": "",
     "preload": ["LaTeX.pool", "article.cls", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty"]
   }, function (data) {
     var mathml = data.result;
@@ -18,13 +14,14 @@ function handle_input(tex) {
     pretty.text(mathml);
     var narration = narrate($(mathml));
     $("table tr:last").before(
-      "<tr><td>" + mathml +
+      '<tr><td style="font-size: large;">' + mathml +
       "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre>" +
       "</td><td>" + narration + "</td></tr>");
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block);
     });
     $("body").css("cursor", "auto");
+    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
   }, "json");
 }
 
