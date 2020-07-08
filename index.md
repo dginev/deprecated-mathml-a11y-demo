@@ -2,8 +2,11 @@
 
 TeX | MathML | Rendered | Narrated
 --- | ------ | -------  | --------
- 0  | `<mn>0</mn>` | 0  | zero
+  |  |  |
 
 
+<link rel="stylesheet" title="Github Gist" href="https://highlightjs.org/static/demo/styles/github-gist.css">
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://github.com/dginev/tiny-mathml-a11y-demo/a11y.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/xml.min.js"></script>
+<script src="/tiny-mathml-a11y-demo/a11y.js"></script>
