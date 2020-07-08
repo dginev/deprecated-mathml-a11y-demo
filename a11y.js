@@ -33,7 +33,6 @@ $(document).ready(function () {
       pretty.text(mathml);
       var narration = narrate($(mathml));
         $("table tr:last").before(
-          "<tr><td>" + tex +
           "</td><td>" + mathml +
           "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre>" +
           "</td><td>"+narration + "</td></tr>");

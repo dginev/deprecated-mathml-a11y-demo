@@ -1,8 +1,8 @@
 # Examples of Accessible Formula Narration
 
-TeX | MathML | Rendered | Narrated
---- | ------ | -------  | --------
-  |  |  |
+MathML | Rendered | Narrated
+------ | -------  | --------
+       |          |
 
 
 <link rel="stylesheet" title="Github Gist" href="https://highlightjs.org/static/demo/styles/github-gist.css">
