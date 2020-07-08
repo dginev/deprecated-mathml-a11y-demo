@@ -39,7 +39,8 @@ function handle_input(tex) {
 
 $(document).ready(function () {
   var tex_examples = [
-    '1+1=2', '\\sqrt{x}','\\binom{n}{m}','a+b-c+d',
+    '1+1=2', '1+2+3=6', 'a+b-c+d',
+    'x<y<z', '\\sqrt{x}','\\binom{n}{m}',
     '|x|+\\lceil{y}\\rceil','\\{1,2,\\ldots\\}',
     'x \\in (a, \\infty)', '|\\psi\\rangle\\langle\\phi|',
     '\\int \\frac{ dr } r', 'a_{0}+\\frac{1}{a_{1}+\\frac{1}{a_{2}+\\cdots}}'
