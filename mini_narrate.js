@@ -24,6 +24,13 @@ function wrapped(op, arg) {
   return op+"-start "+arg+" "+op+"-end"; }
 
 function narrate_by_table(op, arg_narrations, style) {
+  if (style == 'annotation') {
+    if (!op || op.length == 0 || op == 'math') {
+      return arg_narrations.join(", ");
+    } else {
+      return op+"("+arg_narrations.join(", ")+")";
+    }
+  }
   switch(op) {
     case 'math':
       return arg_narrations.join(" ");
