@@ -41,6 +41,9 @@ function narrate_by_table(op, arg_narrations, style) {
     case 'plus':
       if (style == 'phrase') { return infix(op,arg_narrations) }
       else { return the_np('sum', arg_narrations.join(" and "))};
+    case 'minus':
+      if (style == 'phrase') { return infix(op, arg_narrations) }
+      else { return the_np('subtraction', arg_narrations.join(" and ")) };
     case 'times':
       if (style == 'phrase') { return infix(op, arg_narrations) }
       else { return the_np('product', arg_narrations.join(" and ")) };
