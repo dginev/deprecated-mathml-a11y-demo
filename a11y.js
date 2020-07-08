@@ -7,7 +7,7 @@ $(document).ready(function () {
     '1+1=2', '\\sqrt{x}','\\binom{n}{m}','a+b-c+d',
     '|x|+\\lceil{y}\\rceil','\\{1,2,\\ldots\\}',
     'x \\in (a, \\infty)', '|\\psi\\rangle\\langle\\phi|',
-    '\\int \\frac{ dr } r'
+    '\\int \\frac{ dr } r', 'a_{0}+\\frac{1}{a_{1}+\\frac{1}{a_{2}+\\cdots}}'
   ];
   var options = '';
   for (index in tex_examples) {
@@ -33,7 +33,7 @@ $(document).ready(function () {
       pretty.text(mathml);
       var narration = narrate($(mathml));
         $("table tr:last").before(
-          "</td><td>" + mathml +
+          "<tr><td>" + mathml +
           "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre>" +
           "</td><td>"+narration + "</td></tr>");
       document.querySelectorAll('pre code').forEach((block) => {
