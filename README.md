@@ -13,6 +13,7 @@ Known limitations:
   - near-everything is at a "barely demoable" stage at time of writing, as this is a first draft of an implementation
   - LaTeXML's accessibility annotations are ongoing work
      - multirelations and complex duals are just a couple of the cases with fishy markup
+     - we need a tiny dialect of TeX macros to demo adding accessibility annotations to e.g. scripts, embellished variables, others... 
   - the narration implementation is extremely limited:
      - we can't do XPath 3 "exclude" selectors in `document.evaluate`, currently arg selection is done very crutchy
      - lacks a coherent linguistic foundation, so readouts are bad
