@@ -2,6 +2,8 @@
 
 Very early pre-alpha stage.
 
+Live demo at: https://dginev.github.io/tiny-mathml-a11y-demo
+
 Method:
  - obtain presentation MathML with accessibility annotations from a TeX formula, via the experimental [LaTeXML accessibility branch](https://github.com/brucemiller/LaTeXML/pull/1305)
  - render the MathML (with help from MathJax if needed), to sample the browser behavior
