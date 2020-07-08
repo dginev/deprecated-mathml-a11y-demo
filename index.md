@@ -3,8 +3,8 @@
 <table>
   <thead>
     <tr>
-      <th>MathML (via LaTeXML)</th>
       <th>Rendered</th>
+      <th>MathML (via LaTeXML)</th>
       <th>Narrations (Early+Broken)</th>
     </tr>
   </thead>
