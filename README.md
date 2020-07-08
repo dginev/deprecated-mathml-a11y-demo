@@ -18,7 +18,7 @@ Known limitations:
      - we can't do XPath 3 "exclude" selectors in `document.evaluate`, currently arg selection is done very crutchy
      - lacks a coherent linguistic foundation, so readouts are bad
      - only covers a very small number of semantic primitives
-     - it is yet to use the positional information of the arguments, e.g. to auto-infer fixity in reading
+     - it is yet to use the positional information of the arguments, e.g. to auto-infer fixity in reading. Standard forms as `@op(@1,@2)` can be auto-inferred with ease.
   - the showcase page is also limited
      - responsive tables are difficult in HTML, 
      - ended up patching the `minimal` theme too much, can be organized a lot better
