@@ -6,14 +6,14 @@ function handle_input(tex) {
     "timeout": "10", "format": "html5", "whatsin": "math", "whatsout": "math", "pmml": "",
     "preload": ["LaTeX.pool", "article.cls", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty"]
   }, function (data) {
-    var mathml = $(data.result);
+    let mathml = $(data.result);
     mathml.removeAttr('alttext'); // table is too wide if kept
-    var pretty = $('<code/>', { 'class': "xml" });
+    let pretty = $('<code/>', { 'class': "xml" });
     pretty.text(mathml.html());
-    var narration_phrase = narrate(mathml, 'phrase');
-    var narration_sentence = narrate(mathml, 'sentence');
-    var annotation_tree = narrate(mathml, 'annotation');
-    var narration_html = '';
+    let narration_phrase = narrate(mathml, 'phrase');
+    let narration_sentence = narrate(mathml, 'sentence');
+    let annotation_tree = narrate(mathml, 'annotation');
+    let narration_html = '';
     if (narration_phrase != narration_sentence) {
       narration_html =
       "<td><span style='font-weight:bold;'>brief:&nbsp;</span>" + narration_phrase +
@@ -42,18 +42,27 @@ function handle_input(tex) {
   }, "json");
 }
 
+function dirty_escape_html(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;"); }
+
 $(document).ready(function () {
-  var tex_examples = [
+  let tex_examples = [
     '1+1=2', '1+2+3=6', 'a+b-c+d',
     'x<y<z', '\\sqrt{x}','\\binom{n}{m}',
     '|x|+\\lceil{y}\\rceil','\\{1,2,\\ldots\\}',
     'x \\in (a, \\infty)', '|\\psi\\rangle\\langle\\phi|',
     '\\int \\frac{ dr } r', 'a_{0}+\\frac{1}{a_{1}+\\frac{1}{a_{2}+\\cdots}}'
   ];
-  var options = '<option disabled selected value> -- select TeX formula -- </option>';
+  let options = '<option disabled selected value> -- select TeX formula -- </option>';
   for (index in tex_examples) {
-    options += '<option value="'+tex_examples[index]+'">'+tex_examples[index]+'</option>'; }
-  var select_element = '<select id="example_select" name="example">'+options+'</select>';
+    let escaped_example = dirty_escape_html(tex_examples[index]);
+    options += '<option value="'+escaped_example+'">'+escaped_example+'</option>'; }
+  let select_element = '<select id="example_select" name="example">'+options+'</select>';
   $("table tr:last").after('<tr class="choice"><td>Examples:</td><td>'+select_element+'</td></tr>');
 
   $("#example_select").change(function() {
