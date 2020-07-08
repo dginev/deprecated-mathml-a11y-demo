@@ -1,6 +1,6 @@
 # Examples of Accessible Formula Narration (Firefox only)
 
-MathML | Rendered | Narrations (Early+Broken)
+MathML (via LaTeXML) | Rendered | Narrations (Early+Broken)
 ------ | -------  | --------
        |          |
 
