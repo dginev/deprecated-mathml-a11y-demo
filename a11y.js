@@ -1,7 +1,4 @@
-function narrate(math) {
-  return 'todo.';
-}
-
+// Just a very simple DFS for now with Neil Soiffer's early stopping algorithm
 function handle_input(tex) {
   $("body").css("cursor", "progress");
   $.post("https://latexml.mathweb.org/convert", { // minimal latexml preloads for somewhat usual latex math
@@ -12,11 +9,12 @@ function handle_input(tex) {
     var mathml = data.result;
     var pretty = $('<code/>', { 'class': "xml" });
     pretty.text(mathml);
-    var narration = narrate($(mathml));
+    var narration_phrase = narrate($(mathml), 'phrase');
+    var narration_sentence = narrate($(mathml), 'sentence');
     $("table tr:last").before(
-      '<tr><td style="font-size: large;">' + mathml +
+      '<tr><td style="font-size: xx-large;">' + mathml +
       "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre>" +
-      "</td><td>" + narration + "</td></tr>");
+      "</td><td>" + narration_phrase + "<br>" + narration_sentence + "</td></tr>");
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block);
     });

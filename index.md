@@ -1,6 +1,6 @@
-# Examples of Accessible Formula Narration
+# Examples of Accessible Formula Narration (Firefox only)
 
-MathML | Rendered | Narrated
+MathML | Rendered | Narrations (Early+Broken)
 ------ | -------  | --------
        |          |
 
@@ -11,4 +11,5 @@ MathML | Rendered | Narrated
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
 <script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/xml.min.js"></script>
+<script src="/tiny-mathml-a11y-demo/mini_narrate.js"></script>
 <script src="/tiny-mathml-a11y-demo/a11y.js"></script>
