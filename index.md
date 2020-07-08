@@ -5,7 +5,7 @@
     <tr>
       <th>Rendered</th>
       <th>MathML (via LaTeXML)</th>
-      <th>Narrations (Early+Broken)</th>
+      <th>Narrations (Naive+Broken)</th>
     </tr>
   </thead>
   <tbody>
