@@ -3,7 +3,12 @@ function narrate(math) {
 }
 
 $(document).ready(function () {
-  var tex_examples = ['1+1=2','\\sqrt{x}'];
+  var tex_examples = [
+    '1+1=2', '\\sqrt{x}','\\binom{n}{m}','a+b-c+d',
+    '|x|+\\lceil{y}\\rceil','\\{1,2,\\ldots\\}',
+    'x \\in (a, \\infty)', '|\\psi\\rangle\\langle\\phi|',
+    '\\int \\frac{ dr } r'
+  ];
   var options = '';
   for (index in tex_examples) {
     options += '<option value="'+tex_examples[index]+'">'+tex_examples[index]+'</option>'; }
