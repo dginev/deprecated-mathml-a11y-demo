@@ -10,6 +10,8 @@ function obtain_arg(index, context) {
     return index; }
 }
 
+function np_of(op, arg) {
+  return op + " of " + arg; }
 function the_np(op,arg) {
   return "the " + op + " of " + arg; }
 function modified_n(op, arg) {
@@ -29,6 +31,11 @@ function narrate_by_table(op, arg_narrations, style) {
     case 'msup':
       if (style == 'phrase') {
         return infix(op, arg_narrations); }
+      else {
+        return wrapped(op, arg_narrations.join(" ")); }
+    case 'square-root':
+      if (style == 'phrase') {
+        return np_of(op, arg_narrations.join(" ")); }
       else {
         return wrapped(op, arg_narrations.join(" ")); }
     case 'plus':
