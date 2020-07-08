@@ -4,6 +4,7 @@ MathML | Rendered | Narrated
 ------ | -------  | --------
        |          |
 
+<form><input id='freetex' name='formula' type='text'><input type="submit" value="convert..."></form>
 
 <link rel="stylesheet" title="Github Gist" href="https://highlightjs.org/static/demo/styles/github-gist.css">
 <script src="https://raw.githubusercontent.com/brucemiller/LaTeXML/master/lib/LaTeXML/resources/javascript/LaTeXML-maybeMathjax.js"></script>
