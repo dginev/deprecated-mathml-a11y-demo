@@ -30,7 +30,7 @@ $(document).ready(function () {
     'x \\in (a, \\infty)', '|\\psi\\rangle\\langle\\phi|',
     '\\int \\frac{ dr } r', 'a_{0}+\\frac{1}{a_{1}+\\frac{1}{a_{2}+\\cdots}}'
   ];
-  var options = '';
+  var options = '<option disabled selected value> -- select an option -- </option>';
   for (index in tex_examples) {
     options += '<option value="'+tex_examples[index]+'">'+tex_examples[index]+'</option>'; }
   var select_element = '<select id="example_select" name="example">'+options+'</select>';
