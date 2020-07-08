@@ -1,6 +1,6 @@
 # Examples of Accessible Formula Narration
 
-<table>
+<table style="color:black;">
   <thead>
     <tr>
       <th>Rendered</th>
