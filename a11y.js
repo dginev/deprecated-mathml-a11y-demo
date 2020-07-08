@@ -6,13 +6,14 @@ function handle_input(tex) {
     "timeout": "10", "format": "html5", "whatsin": "math", "whatsout": "math", "pmml": "",
     "preload": ["LaTeX.pool", "article.cls", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty"]
   }, function (data) {
-    var mathml = data.result;
+    var mathml = $(data.result);
+    mathml.removeAttr('alttext'); // table is too wide if kept
     var pretty = $('<code/>', { 'class': "xml" });
-    pretty.text(mathml);
-    var narration_phrase = narrate($(mathml), 'phrase');
-    var narration_sentence = narrate($(mathml), 'sentence');
+    pretty.text(mathml.html());
+    var narration_phrase = narrate(mathml, 'phrase');
+    var narration_sentence = narrate(mathml, 'sentence');
     $("table tr:last").before(
-      '<tr><td style="font-size: xx-large;">' + mathml +
+      '<tr><td style="font-size: x-large;">' + mathml[0].outerHTML +
       "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre>" +
       "</td><td>" + narration_phrase + "<br><br>" + narration_sentence + "</td></tr>");
     document.querySelectorAll('pre code').forEach((block) => {
