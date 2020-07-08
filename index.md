@@ -1,4 +1,4 @@
-# Examples of Accessible Formula Narration (Firefox only)
+# Examples of Accessible Formula Narration
 
 <table>
   <thead>

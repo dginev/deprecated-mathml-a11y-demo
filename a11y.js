@@ -19,6 +19,9 @@ function handle_input(tex) {
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block);
     });
+    if (typeof MathJax != "undefined") { // retypeset doc if we have MathJax loaded
+      MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    }
     $("body").css("cursor", "auto");
     $("html, body").animate({ scrollTop: $(document).height() }, "slow");
   }, "json");
