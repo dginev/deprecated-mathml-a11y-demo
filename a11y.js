@@ -14,7 +14,7 @@ function handle_input(tex) {
     $("table tr:last").before(
       '<tr><td style="font-size: xx-large;">' + mathml +
       "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre>" +
-      "</td><td>" + narration_phrase + "<br>" + narration_sentence + "</td></tr>");
+      "</td><td>" + narration_phrase + "<br><br>" + narration_sentence + "</td></tr>");
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block);
     });

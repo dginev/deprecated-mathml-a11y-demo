@@ -1,34 +1,3 @@
-example = `<math id="p1.m1" class="ltx_Math" alttext="a_{0}+\\frac{1}{a_{1}+\\frac{1}{a_{2}+\\cdots}}" display="inline">
-  <mrow data-semantic="@op(@1,@2)">
-    <msub data-arg="1">
-      <mi>a</mi>
-      <mn>0</mn>
-    </msub>
-    <mo data-arg="op" data-semantic="plus">+</mo>
-    <mfrac data-arg="2" data-semantic="divide(@1,@2)">
-      <mn data-arg="1" data-semantic="1">1</mn>
-      <mrow data-arg="2" data-semantic="@op(@1,@2)">
-        <msub data-arg="1">
-          <mi>a</mi>
-          <mn data-semantic="1">1</mn>
-        </msub>
-        <mo data-arg="op" data-semantic="plus">+</mo>
-        <mfrac data-arg="2" data-semantic="divide(@1,@2)">
-          <mn data-arg="1" data-semantic="1">1</mn>
-          <mrow data-arg="2" data-semantic="@op(@1,@2)">
-            <msub data-arg="1">
-              <mi>a</mi>
-              <mn data-semantic="2">2</mn>
-            </msub>
-            <mo data-arg="op" data-semantic="plus">+</mo>
-            <mi data-arg="2" mathvariant="normal">⋯</mi>
-          </mrow>
-        </mfrac>
-      </mrow>
-    </mfrac>
-  </mrow>
-</math>`;
-
 function obtain_arg(index, context) {
   if (index[0] == '@') {
     index = index.replace('@','');
