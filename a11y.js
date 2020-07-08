@@ -12,10 +12,20 @@ function handle_input(tex) {
     pretty.text(mathml.html());
     var narration_phrase = narrate(mathml, 'phrase');
     var narration_sentence = narrate(mathml, 'sentence');
+    var narration_html = '';
+    if (narration_phrase != narration_sentence) {
+      narration_html =
+      "<td><span style='font-weight:bold;'>brief:&nbsp;</span>" + narration_phrase +
+        "<br><br><span style='font-weight:bold;'>full:&nbsp;</span>" + narration_sentence + "</td>"
+    } else {
+      narration_html =
+        "<td>"+narration_phrase+"</td>";
+    }
     $("table tr:last").before(
       '<tr><td style="font-size: x-large;">' + mathml[0].outerHTML +
-      "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre>" +
-      "</td><td>" + narration_phrase + "<br><br>" + narration_sentence + "</td></tr>");
+      "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre></td>" +
+      narration_html +
+      "</tr>");
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block);
     });
