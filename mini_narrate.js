@@ -50,6 +50,11 @@ function narrate_by_table(op, arg_narrations, style) {
       else {
         return wrapped('fraction', wrapped('numerator', arg_narrations[0]) + " " + wrapped('denominator', arg_narrations[1]));
       }
+    case 'equals':
+      if (style == 'phrase') {
+        return infix(op, arg_narrations);  }
+      else {
+        return infix('is equal to', arg_narrations); }
     default:
       return wrapped(op, arg_narrations.join(" "));
   }
