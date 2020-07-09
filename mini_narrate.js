@@ -28,6 +28,9 @@ function modified_n(op, arg) { // for things like transpose maybe?
   return arg+" "+op+"-ed"; }
 function infix(op, args) {
   return args.join(" "+op+" "); }
+function infix_dashed(op, args) {
+  return args.join("-" + op + "-");
+}
 function postfix(op, arg) {
   return arg+" "+op; }
 function prefix(op, arg) {
@@ -92,7 +95,7 @@ function phrase_narrate_switch(op, arg_narrations) {
       return arg_narrations.join(" ");
     case 'msub':
     case 'msup':
-      return infix(op, arg_narrations);
+      return infix_dashed(op, arg_narrations);
     case 'msqrt':
     case 'square-root':
       return prefix('square root', arg_narrations[0]);
