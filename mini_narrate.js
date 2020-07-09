@@ -75,7 +75,7 @@ function default_narrate_switch(op, arg_narrations) {
     case 'element-of':
       return infix('is an element of', arg_narrations);
     case 'equals':
-      infix('is equal to', arg_narrations);
+      return infix('is equal to', arg_narrations);
     default:
       // considered as default:
       // case 'msub':
