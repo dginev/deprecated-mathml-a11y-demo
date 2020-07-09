@@ -1,6 +1,6 @@
 function obtain_arg(index, context) {
-  if (index[0] == '@') {
-    index = index.replace('@','');
+  if (index[0] == '#') {
+    index = index.replace('#','');
     let xpathResult = document.evaluate(
       '*[@data-arg="' + index + '"] | *[not(@data-semantic)]/*[@data-arg="' + index + '"]',
       context);
