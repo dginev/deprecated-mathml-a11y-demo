@@ -15,7 +15,7 @@ function action_concept(op) {
     case 'plus': return 'sum';
     case 'minus': return 'difference';
     case 'times': return 'product';
-    case 'divide': return 'continued fraction';
+    case 'divide': return 'division';
     case 'equals': return 'equality';
     default: // default as-is
       return op; } }
@@ -58,12 +58,6 @@ function default_narrate_switch(op, arg_narrations) {
     case 'math':
     case 'mrow':
       return arg_narrations.join(" ");
-    case 'msub':
-    case 'msup':
-      return wrapped(op, arg_narrations.join(" "));
-    case 'msqrt':
-    case 'square-root':
-      return wrapped(op, arg_narrations.join(" "));
     case 'plus':
     case 'minus':
     case 'times':
@@ -73,6 +67,7 @@ function default_narrate_switch(op, arg_narrations) {
         case 1: return prefix(op, arg_narrations[0]);
         default: return the_np(op, arg_narrations.join(" and ")); //n-ary
       }
+    case 'square-root':
     case 'factorial':
       return the_np(op, arg_narrations[0]);
     case 'binomial':
@@ -82,7 +77,11 @@ function default_narrate_switch(op, arg_narrations) {
     case 'equals':
       infix('is equal to', arg_narrations);
     default:
-      return wrapped(op, arg_narrations.join(" "));
+      // considered as default:
+      // case 'msub':
+      // case 'msup':
+      // case 'msqrt':
+      return wrapped(op, arg_narrations.join(", "));
   }
 }
 
@@ -96,7 +95,7 @@ function phrase_narrate_switch(op, arg_narrations) {
       return infix(op, arg_narrations);
     case 'msqrt':
     case 'square-root':
-      return np_of(op, arg_narrations.join(" "));
+      return prefix('square root', arg_narrations[0]);
     case 'plus': // multiple fixities, determine by arg count
     case 'minus':
     case 'times':
@@ -118,7 +117,7 @@ function phrase_narrate_switch(op, arg_narrations) {
     case 'element-of':
       return infix('in', arg_narrations);
     default:
-      return wrapped(op, arg_narrations.join(" "));
+      return wrapped(op, arg_narrations.join(", "));
   }
 }
 
