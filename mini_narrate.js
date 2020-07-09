@@ -25,7 +25,7 @@ function wrapped(op, arg) {
 
 function narrate_by_table(op, arg_narrations, style) {
   if (style == 'annotation') {
-    if (!op || op.length == 0 || op == 'math') {
+    if (!op || op.length == 0 || op == 'math' || op =='mrow') {
       return arg_narrations.join(", ");
     } else {
       return op+"("+arg_narrations.join(", ")+")";
@@ -33,6 +33,7 @@ function narrate_by_table(op, arg_narrations, style) {
   }
   switch(op) {
     case 'math':
+    case 'mrow':
       return arg_narrations.join(" ");
     case 'msub':
     case 'msup':
