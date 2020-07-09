@@ -10,62 +10,105 @@ function obtain_arg(index, context) {
     return index; }
 }
 
+function action_concept(op) {
+  switch(op) {
+    case 'plus': return 'sum';
+    case 'minus': return 'difference';
+    case 'times': return 'product';
+    case 'divide': return 'continued fraction';
+    case 'equals': return 'equality';
+    default: // default as-is
+      return op; } }
 function np_of(op, arg) {
   return op + " of " + arg; }
 function the_np(op,arg) {
-  return "the " + op + " of " + arg; }
-function modified_n(op, arg) {
+  let concept = action_concept(op);
+  return "the " + concept + " of " + arg + " end-" + concept; }
+function modified_n(op, arg) { // for things like transpose maybe?
   return arg+" "+op+"-ed"; }
 function infix(op, args) {
   return args.join(" "+op+" "); }
-function asis(op,arg) {
-  return op+" "+arg; }
+function postfix(op, arg) {
+  return arg+" "+op; }
+function prefix(op, arg) {
+  return op + " " +arg; }
 function wrapped(op, arg) {
-  return op+"-start "+arg+" "+op+"-end"; }
+  if (op && op.length>0) {
+    return op+"-start "+arg+" "+op+"-end"; }
+  else {
+    return arg; } }
 
 function narrate_by_table(op, arg_narrations, style) {
-  if (style == 'annotation') {
-    if (!op || op.length == 0 || op == 'math' || op =='mrow') {
-      return arg_narrations.join(", ");
-    } else {
-      return op+"("+arg_narrations.join(", ")+")";
-    }
+  switch(style) {
+    case 'annotation':
+      if (!op || op.length == 0 || op == 'math' || op =='mrow') {
+        return arg_narrations.join(", ");
+      } else {
+        return op+"("+arg_narrations.join(", ")+")";
+      }
+    case 'phrase':
+      return phrase_narrate_switch(op, arg_narrations);
+    default:
+      return default_narrate_switch(op, arg_narrations);
   }
+}
+
+function default_narrate_switch(op, arg_narrations) {
+  switch (op) {
+    case 'math':
+    case 'mrow':
+      return arg_narrations.join(" ");
+    case 'msub':
+    case 'msup':
+      return wrapped(op, arg_narrations.join(" "));
+    case 'msqrt':
+    case 'square-root':
+      return wrapped(op, arg_narrations.join(" "));
+    case 'plus':
+    case 'minus':
+    case 'times':
+    case 'divide':
+      switch (arg_narrations.length) {
+        case 0: return op;
+        case 1: return prefix(op, arg_narrations[0]);
+        default: return the_np(op, arg_narrations.join(" and ")); //n-ary
+      }
+    case 'factorial':
+      return the_np(op, arg_narrations[0]);
+    case 'equals':
+      infix('is equal to', arg_narrations);
+    default:
+      return wrapped(op, arg_narrations.join(" "));
+  }
+}
+
+function phrase_narrate_switch(op, arg_narrations) {
   switch(op) {
     case 'math':
     case 'mrow':
       return arg_narrations.join(" ");
     case 'msub':
     case 'msup':
-      if (style == 'phrase') {
-        return infix(op, arg_narrations); }
-      else {
-        return wrapped(op, arg_narrations.join(" ")); }
+      return infix(op, arg_narrations);
+    case 'msqrt':
     case 'square-root':
-      if (style == 'phrase') {
-        return np_of(op, arg_narrations.join(" ")); }
-      else {
-        return wrapped(op, arg_narrations.join(" ")); }
-    case 'plus':
-      if (style == 'phrase') { return infix(op,arg_narrations) }
-      else { return the_np('sum', arg_narrations.join(" and "))};
+      return np_of(op, arg_narrations.join(" "));
+    case 'plus': // multiple fixities, determine by arg count
     case 'minus':
-      if (style == 'phrase') { return infix(op, arg_narrations) }
-      else { return the_np('subtraction', arg_narrations.join(" and ")) };
     case 'times':
-      if (style == 'phrase') { return infix(op, arg_narrations) }
-      else { return the_np('product', arg_narrations.join(" and ")) };
-    case 'divide':
-      if (style == 'phrase') {
-        return infix('divided by', arg_narrations); }
-      else {
-        return wrapped('fraction', wrapped('numerator', arg_narrations[0]) + " " + wrapped('denominator', arg_narrations[1]));
-      }
     case 'equals':
-      if (style == 'phrase') {
-        return infix(op, arg_narrations);  }
-      else {
-        return infix('is equal to', arg_narrations); }
+      switch(arg_narrations.length) {
+        case 0: return op;
+        // the 1-argument case is obviously incorrect, A- for effort
+        // we need a special way to mark a postfix op, from the presentation
+        // it's too late to try here
+        case 1: return prefix(op, arg_narrations[0]);
+        default: return infix(op, arg_narrations); //n-ary infix
+      }
+    case 'divide':
+      return infix('divided by', arg_narrations);
+    case 'factorial':
+      return postfix(op, arg_narrations[0]);
     default:
       return wrapped(op, arg_narrations.join(" "));
   }
