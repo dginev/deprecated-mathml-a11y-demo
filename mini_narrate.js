@@ -77,6 +77,8 @@ function default_narrate_switch(op, arg_narrations) {
       return the_np(op, arg_narrations[0]);
     case 'binomial':
       return the_np(op, arg_narrations.join(" and "));
+    case 'element-of':
+      return infix('is an element of', arg_narrations);
     case 'equals':
       infix('is equal to', arg_narrations);
     default:
@@ -113,6 +115,8 @@ function phrase_narrate_switch(op, arg_narrations) {
       return postfix(op, arg_narrations[0]);
     case 'binomial':
       return infix('choose', arg_narrations);
+    case 'element-of':
+      return infix('in', arg_narrations);
     default:
       return wrapped(op, arg_narrations.join(" "));
   }
