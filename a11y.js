@@ -52,6 +52,8 @@ function dirty_escape_html(unsafe) {
 
 $(document).ready(function () {
   let tex_examples = [
+    'x!y!', 'a+b+c+d+e', '\\frac{\\partial^{3}}{\\partial x^{1} \\partial y^{2}} f(x, y)',
+    'l =\\iiint_{T} f(x, y, z) dx dy dz',
     '1+1=2', '1+2+3=6', 'a+b-c+d',
     'x<y<z', '\\sqrt{x}','\\binom{n}{m}',
     '|x|+\\lceil{y}\\rceil','\\{1,2,\\ldots\\}',
