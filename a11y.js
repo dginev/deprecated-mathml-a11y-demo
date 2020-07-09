@@ -52,13 +52,15 @@ function dirty_escape_html(unsafe) {
 
 $(document).ready(function () {
   let tex_examples = [
-    'x!y!', 'a+b+c+d+e', '\\frac{\\partial^{3}}{\\partial x^{1} \\partial y^{2}} f(x, y)',
-    'l =\\iiint_{T} f(x, y, z) dx dy dz',
+    'x!y!', 'a+b+c+d+e',
+    '\\frac{dy}{dx} = \\frac{d}{dx}[y]',
+    '\\int \\frac{ dr } r = \\int \\frac{1}{r} dr',
     '1+1=2', '1+2+3=6', 'a+b-c+d',
     'x<y<z', '\\sqrt{x}','\\binom{n}{m}',
     '|x|+\\lceil{y}\\rceil','\\{1,2,\\ldots\\}',
     'x \\in (a, \\infty)', '|\\psi\\rangle\\langle\\phi|',
-    '\\int \\frac{ dr } r', 'a_{0}+\\frac{1}{a_{1}+\\frac{1}{a_{2}+\\cdots}}'
+    '\\iiint_{T} f(x, y, z) dx dy dz',
+    'a_{0}+\\frac{1}{a_{1}+\\frac{1}{a_{2}+\\cdots}}'
   ];
   let options = '<option disabled selected value> -- select TeX formula -- </option>';
   for (index in tex_examples) {
