@@ -75,6 +75,8 @@ function default_narrate_switch(op, arg_narrations) {
       }
     case 'factorial':
       return the_np(op, arg_narrations[0]);
+    case 'binomial':
+      return the_np(op, arg_narrations.join(" and "));
     case 'equals':
       infix('is equal to', arg_narrations);
     default:
@@ -109,6 +111,8 @@ function phrase_narrate_switch(op, arg_narrations) {
       return infix('divided by', arg_narrations);
     case 'factorial':
       return postfix(op, arg_narrations[0]);
+    case 'binomial':
+      return infix('choose', arg_narrations);
     default:
       return wrapped(op, arg_narrations.join(" "));
   }
