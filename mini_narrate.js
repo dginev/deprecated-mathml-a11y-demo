@@ -73,8 +73,14 @@ function narrate_by_table(op, arg_narrations, style) {
         return op+"("+arg_narrations.join(", ")+")";
       }
     case 'phrase':
+      if (op.startsWith('delimited-')) {
+        return list_and(arg_narrations);
+      }
       return phrase_narrate_switch(op, arg_narrations);
     default:
+      if (op.startsWith('delimited-')) {
+        return list_and(arg_narrations);
+      }
       return default_narrate_switch(op, arg_narrations);
   }
 }
