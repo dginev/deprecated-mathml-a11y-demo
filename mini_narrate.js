@@ -37,6 +37,7 @@ function list_conj(conj, args) {
 function list_and(args) {return list_conj("and", args);}
 function list_or(args) { return list_conj("or", args); }
 
+// np = noun phrase
 function np_of(op, arg) {
   return op + " of " + arg; }
 function the_np(op,arg) {
@@ -109,6 +110,9 @@ function default_narrate_switch(op, arg_narrations) {
       return the_np(op, arg_narrations[0]);
     case 'binomial':
     case 'set':
+    case 'absolute-value':
+    case 'ceiling':
+    case 'floor':
       return the_np(op, list_and(arg_narrations));
     case 'element-of':
       return infix('is an element of', arg_narrations);
@@ -178,6 +182,11 @@ function phrase_narrate_switch(op, arg_narrations) {
     case 'open-closed-interval':
     case 'closed-open-interval':
       return infix('to', arg_narrations);
+    case 'absolute-value':
+      return np_of('modulus', arg_narrations[0]);
+    case 'ceiling':
+    case 'floor':
+      return np_of(op,arg_narrations[0]);
     default:
       return wrapped(op, arg_narrations.join(", "));
   }
