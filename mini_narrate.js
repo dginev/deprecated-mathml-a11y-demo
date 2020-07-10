@@ -19,6 +19,23 @@ function action_concept(op) {
     case 'equals': return 'equality';
     default: // default as-is
       return op; } }
+function list_conj(conj, args) {
+  if (!Array.isArray(args)) {
+    return args; }
+  switch (args.length) {
+    case 0: return '';
+    case 1: return args[0];
+    default:
+      let last_arg = args.pop().trim();
+      if (last_arg.startsWith(conj)) { // some flexibility for '...'
+        return args.join(", ") + " " + last_arg; }
+      else {
+        return args.join(", ")+" "+conj+" "+last_arg; }
+  }
+}
+function list_and(args) {return list_conj("and", args);}
+function list_or(args) { return list_conj("or", args); }
+
 function np_of(op, arg) {
   return op + " of " + arg; }
 function the_np(op,arg) {
@@ -41,6 +58,12 @@ function wrapped(op, arg) {
   else {
     return arg; } }
 
+function narrate_symbol(textsymbol) {
+  switch(textsymbol) {
+    case '…': return 'and so on';
+    default: return textsymbol;
+  }
+}
 function narrate_by_table(op, arg_narrations, style) {
   switch(style) {
     case 'annotation':
@@ -68,17 +91,28 @@ function default_narrate_switch(op, arg_narrations) {
       switch (arg_narrations.length) {
         case 0: return op;
         case 1: return prefix(op, arg_narrations[0]);
-        default: return the_np(op, arg_narrations.join(" and ")); //n-ary
+        default: return the_np(op, list_and(arg_narrations)); //n-ary
       }
     case 'square-root':
     case 'factorial':
       return the_np(op, arg_narrations[0]);
     case 'binomial':
-      return the_np(op, arg_narrations.join(" and "));
+    case 'set':
+      return the_np(op, list_and(arg_narrations));
     case 'element-of':
       return infix('is an element of', arg_narrations);
     case 'equals':
       return infix('is equal to', arg_narrations);
+    case 'multirelation':
+      let relations = [];
+      let max_index = arg_narrations.length-3;
+      let index = 0;
+      while(index<=max_index) {
+        relations.push(
+          infix(arg_narrations[index+1],
+            [arg_narrations[index], arg_narrations[index+2]]));
+        index+=2; }
+      return infix('and', relations);
     default:
       // considered as default:
       // case 'msub':
@@ -117,8 +151,12 @@ function phrase_narrate_switch(op, arg_narrations) {
       return postfix(op, arg_narrations[0]);
     case 'binomial':
       return infix('choose', arg_narrations);
+    case 'set':
+      return the_np(op, list_and(arg_narrations));
     case 'element-of':
       return infix('in', arg_narrations);
+    case 'multirelation':
+      return arg_narrations.join(" ");
     default:
       return wrapped(op, arg_narrations.join(", "));
   }
@@ -165,6 +203,9 @@ function narrate(math, style) {
       narration = narrate_by_table($(math).prop("tagName"), arg_narrations, style);
     } else {
       narration = $(math).text();
+      if (style != 'annotation') {
+        narration = narrate_symbol(narration);
+      }
     }
   }
   narration = narration.replace(/\s\s+/g, ' '); // sloppy spacing work, just clean up at the end
