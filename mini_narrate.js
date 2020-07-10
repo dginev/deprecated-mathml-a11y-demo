@@ -162,7 +162,7 @@ function narrate(math, style) {
       $(children).each(function (index, value) {
         arg_narrations.push(narrate($(value), style));
       });
-      narration = narrate_by_table(math.prop("tagName"), arg_narrations, style);
+      narration = narrate_by_table($(math).prop("tagName"), arg_narrations, style);
     } else {
       narration = $(math).text();
     }
