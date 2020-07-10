@@ -1,14 +1,15 @@
-function obtain_arg(index, context) {
-  if (index[0] == '#') {
-    index = index.replace('#','');
-    let xpathResult = document.evaluate(
-      '*[@data-arg="' + index + '"] | *[not(@data-semantic)]/*[@data-arg="' + index + '"]',
-      context);
-    let found = xpathResult.iterateNext();
-    return found ; }
-  else { // literal was passed in, nothing to do
-    return index; }
-}
+function obtain_arg(target_arg, context) {
+  // Simple DFS descent
+  let result;
+  $.each(context.children, function(child_idx, child) {
+    if (child.getAttribute('data-arg') == target_arg) {
+      result = child; return false; }
+    else if (!child.getAttribute('data-semantic')) {
+      let child_result = obtain_arg(target_arg, child);
+      if (child_result) {
+        result = child_result; return false; } }
+  });
+  return result; }
 
 function action_concept(op) {
   switch(op) {
@@ -41,6 +42,10 @@ function np_of(op, arg) {
 function the_np(op,arg) {
   let concept = action_concept(op);
   return "the " + concept + " of " + arg + " end-" + concept; }
+function the_np_from_to(op, args) {
+  let concept = action_concept(op);
+  return "the " + concept + " from " + args[0] + " to "+args[1]+" end-" + concept;
+}
 function modified_n(op, arg) { // for things like transpose maybe?
   return arg+" "+op+"-ed"; }
 function infix(op, args) {
@@ -119,6 +124,11 @@ function default_narrate_switch(op, arg_narrations) {
             [arg_narrations[index], arg_narrations[index+2]]));
         index+=2; }
       return infix('and', relations);
+    case 'open-interval':
+    case 'closed-interval':
+    case 'open-closed-interval':
+    case 'closed-open-interval':
+      return the_np_from_to(op, arg_narrations);
     default:
       // considered as default:
       // case 'msub':
@@ -163,6 +173,11 @@ function phrase_narrate_switch(op, arg_narrations) {
       return infix('in', arg_narrations);
     case 'multirelation':
       return arg_narrations.join(" ");
+    case 'open-interval':
+    case 'closed-interval':
+    case 'open-closed-interval':
+    case 'closed-open-interval':
+      return infix('to', arg_narrations);
     default:
       return wrapped(op, arg_narrations.join(", "));
   }
@@ -174,30 +189,64 @@ function narrate(math, style) {
   if (typeof math === 'string') { return math;} // literal narrates as self (for now)
   let narration = '';
   let semantic = $(math).data('semantic');
+  return narrate_semantic(math, style, semantic); }
+// narrate_semantic($('body'),'phrase','equals(plus(1,2),times(3,minus(5)))')
+
+function narrate_semantic(math, style, semantic) {
   if (semantic && semantic.length>0) { // balanced parens need a context-free grammar here, but for the demo we regex and whistle.
     let operator_call = /^([^(]+)\((.*)\)$/;
     let op_arg;
-    semantic = semantic.replace(operator_call, function (m0, m1, m2) { op_arg=m1; return m2;});
-    let args = semantic.split(',');
+    let arg_body = semantic.replace(operator_call, function (m0, m1, m2) { op_arg=m1; return m2;});
+    // we can't just split by coma, we need to balance any possible parens...
+    let args = [op_arg];
+    let piece='';
+    let open_stack = 0;
+    for (const c of arg_body) {
+      switch (c) {
+      case ',':
+        if (open_stack == 0) {
+          args.push(piece); piece = ''; }
+        else { piece+=c;}
+        break;
+      case '(':
+        open_stack+=1;
+        piece+=c;
+        break;
+      case ')':
+        open_stack-=1;
+        piece += c;
+        break;
+      default:
+        piece += c; } }
+    if (piece && piece.length>0) { // wrap up
+      args.push(piece); }
     let arg_narrations = [];
     let context = math[0];
     $.each(args, function (idx, arg) {
-      let arg_node = obtain_arg(arg, context);
-      if (typeof arg_node === 'string') {
-        arg_narrations.push(arg_node);
-      } else {
-        arg_narrations.push(narrate($(arg_node),style));
-      }
+      if (!arg) { return true; } // continue on undefined arguments
+      // if any of the args contains () they need to be expanded recursively, do so
+      if (arg.indexOf('(') > -1 || arg.indexOf(')') > -1) {
+        arg_narrations.push(narrate_semantic(math, style, arg)); }
+      else if (!arg.startsWith('#')) { // literal
+        arg_narrations.push(arg); }
+      else {
+        arg = arg.substr(1);
+        let arg_node = obtain_arg(arg, context);
+        if (arg_node) {
+          arg_narrations.push(narrate($(arg_node), style)); }
+        else {
+          arg_narrations.push("missing_arg:"+arg); } }
     });
     // TODO: We need a great XPath here to avoid descending into data-semantic nodes. "exclude" requires XPath 3 which we don't have access to.
     // crutch for now, to go 1 or 2 levels down only.
-    if (op_arg && op_arg.length > 0) {
-      let op_node = obtain_arg(op_arg, context);
-      let key = narrate(op_node, style);
-      narration = narrate_by_table(key, arg_narrations, style);
-    } else {
-      narration = arg_narrations.join(" ");
-    }
+    op_key = arg_narrations.shift();
+    if (op_key && op_key.length>0) {
+      if (arg_narrations.length == 0) {
+        narration = narrate_symbol(op_key); }
+      else {
+        narration = narrate_by_table(op_key, arg_narrations, style); } }
+    else {
+      narration = 'failed_to_narrate:(' + semantic+')'; }
   } else {
     // descend in children, assuming independence
     let children = $(math).children();
