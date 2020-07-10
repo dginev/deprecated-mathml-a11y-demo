@@ -4,7 +4,7 @@ function handle_input(tex) {
   $.post("https://latexml.mathweb.org/convert", { // minimal latexml preloads for somewhat usual latex math
     "tex": tex,
     "timeout": "10", "format": "html5", "whatsin": "math", "whatsout": "math", "pmml": "",
-    "preload": ["LaTeX.pool", "article.cls", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty"]
+    "preload": ["LaTeX.pool", "article.cls", "latexml.sty", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty", "a11ymark.sty"]
   }, function (data) {
     let mathml = $(data.result);
     mathml.removeAttr('alttext'); // table is too wide if kept
@@ -51,6 +51,7 @@ function dirty_escape_html(unsafe) {
     .replace(/'/g, "&#039;"); }
 
 $(document).ready(function () {
+  // Predefined examples for easy exploring:
   let tex_examples = [
     'x!y!', 'a+b+c+d+e',
     '\\frac{dy}{dx} = \\frac{d}{dx}[y]',
@@ -64,10 +65,21 @@ $(document).ready(function () {
     '\\binom{n}{m}',
     '\\binom{ \\binom{ a } { b } } { \\binom{ x } { y } }'
   ];
+  let semantic_tex_examples = [
+    "\\lxDeclare[role=FUNCTION]{$f$} \\integral{f(x)}{x}"
+  ];
+
   let options = '<option disabled selected value> -- select TeX formula -- </option>';
-  for (index in tex_examples) {
-    let escaped_example = dirty_escape_html(tex_examples[index]);
-    options += '<option value="'+escaped_example+'">'+escaped_example+'</option>'; }
+  $.each(tex_examples, function (idx, example) {
+    let escaped_example = dirty_escape_html(example);
+    options += '<option value="'+escaped_example+'">'+escaped_example+'</option>'; });
+  // now concat the semantic examples
+  options += '<option disabled value> -- Semantic TeX macro examples -- </option>';
+  $.each(semantic_tex_examples, function (idx, example) {
+    let escaped_example = dirty_escape_html(example);
+    options += '<option value="' + escaped_example + '">' + escaped_example + '</option>';
+  });
+
   let select_element = '<select id="example_select" name="example">'+options+'</select>';
   $("table tr:last").after('<tr class="choice"><td>Examples:</td><td>'+select_element+'</td></tr>');
 
