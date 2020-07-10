@@ -4,7 +4,7 @@
   <thead>
     <tr>
       <th>Rendered</th>
-      <th><a href='https://www.w3.org/community/mathml4/'>MathML 4?</a> (via LaTeXML)</th>
+      <th>MathML <a href='https://www.w3.org/community/mathml4/'>4?</a>, <a href='https://mathml-refresh.github.io/mathml/docs/semantics-mini'>semantics-mini</a> (via LaTeXML)</th>
       <th>Narrations (Naive+Broken)</th>
     </tr>
   </thead>
