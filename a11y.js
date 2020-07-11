@@ -1,9 +1,9 @@
 // Predefined TeX examples for easy exploring:
 let a11y_other_examples = {
   'abs, ceil, floor': '|x|+\\lceil{y}\\rceil\\lfloor{z}\\rfloor',
-  'binomial (nested)': '\\binom{ \\binom{ a } { b } } { \\binom{ x } { y } }',
+  'binomial (nested)': '\\binom{\\binom{a}{b}}{\\binom{x}{y}}',
   'factorials': 'x!y!',
-  'integral notations': '\\int \\frac{ dr } r = \\int \\frac{1}{r} dr',
+  'integral notations': '\\int \\frac{dr}r = \\int\\frac{1}{r} dr',
   'integral, triple': '\\iiint_{T} f(x, y, z) dx dy dz',
   'interval membership': 'x \\in (a, \\infty)',
   'Leibniz notation': '\\frac{dy}{dx} = \\frac{d}{dx}[y]',
@@ -26,7 +26,7 @@ let a11y_mini_spec_examples = {
   'fenced-stacked, Eulerian numbers': '\\left< n \\atop k \\right>',
   'fenced-stacked, multinomial': '\\binom{n}{m_1,m_2,m_3}',
   'fenced-sub, Pochhammer': '\\left(a\\right)_n',
-  'fenced-table, 3j symbol': '\\left(\\begin{ array }{ ccc }j_1& j_2 &j_3 \\\\ m_1 &m_2 &m_3\\end{ array }\\right)',
+  'fenced-table, 3j symbol': '\\left(\\begin{array}{ccc}j_1& j_2 &j_3 \\\\ m_1 &m_2 &m_3\\end{array}\\right)',
   'fenced, abs': '|x|',
   'fenced, Clebsch-Gordan': '(j_1 m_1 j_2 m_2 | j_1 j_2 j_3 m_3)|',
   'fenced, determinant': '|\\mathbf{X}|',
