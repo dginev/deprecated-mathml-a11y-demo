@@ -1,6 +1,6 @@
 // Predefined TeX examples for easy exploring:
 let a11y_other_examples = {
-  'abs, ceil, floor': '|x|+\\lceil{y}\\rceil\\floor{y}\\floor',
+  'abs, ceil, floor': '|x|+\\lceil{y}\\rceil\\lfloor{z}\\rfloor',
   'binomial (nested)': '\\binom{ \\binom{ a } { b } } { \\binom{ x } { y } }',
   'factorials': 'x!y!',
   'integral notations': '\\int \\frac{ dr } r = \\int \\frac{1}{r} dr',
@@ -23,7 +23,7 @@ let a11y_mini_spec_examples = {
   'factorial': 'n!',
   'power': 'x^n',
   'repeated application': 'f^n',
-  'inverse': 'sin^-1 (x)',
+  'inverse': '\\sin^-1 (x)',
   'n-th derivative': 'f^{(n)}',
   'indexing': 'a_i',
   'sup-transpose': 'A^T',
@@ -32,7 +32,7 @@ let a11y_mini_spec_examples = {
   'awkward nesting (1)': "x'_i",
   'awkward nesting (2)': "\\overline{x}_i",
   'base-operator': 'C^n_m',
-  'fenced, abs': '| x |',
+  'fenced, abs': '|x|',
   'fenced, norm': '|\\mathbf{x}|',
   'fenced, determinant': '|\\mathbf{X}|',
   'fenced, sequence': '\\lbrace a_n\\rbrace',
@@ -63,7 +63,8 @@ function handle_input(tex) {
   $.post("https://latexml.mathweb.org/convert", { // minimal latexml preloads for somewhat usual latex math
     "tex": tex,
     "timeout": "10", "format": "html5", "whatsin": "math", "whatsout": "math", "pmml": "",
-    "preload": ["LaTeX.pool", "article.cls", "latexml.sty", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty", "a11ymark.sty"]
+    "cache_key": "a11y_showcase",
+    "preload": ["LaTeX.pool", "article.cls", "latexml.sty", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty", "a11ymark.sty", 'array.sty']
   }, function (data) {
     let mathml = $(data.result);
     mathml.removeAttr('alttext'); // table is too wide if kept
