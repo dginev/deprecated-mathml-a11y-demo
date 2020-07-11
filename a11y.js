@@ -48,9 +48,9 @@ let a11y_mini_spec_examples = {
   'n-th derivative': 'f^{(n)}',
   'power': '\\power{x}{n}',
   'repeated application': 'f^n',
-  'second derivative': "f''",
-  'sup-adjoint': 'A^\\dagger',
-  'sup-transpose': 'A^T',
+  'second derivative': "\\derivenum{f}{2}",
+  'sup-adjoint': '\\adjoint{A}',
+  'sup-transpose': '\\transpose{A}',
   'unary minus': '-a',
 }
 let a11y_semantic_tex_examples = {
