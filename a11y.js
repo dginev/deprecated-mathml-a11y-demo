@@ -46,7 +46,7 @@ let a11y_mini_spec_examples = {
   'Laplacian': '\\nabla ^ 2 f',
   'n-ary? plus-minus chain': 'a+b-c+d',
   'n-th derivative': 'f^{(n)}',
-  'power': 'x^n',
+  'power': '\\power{x}{n}',
   'repeated application': 'f^n',
   'second derivative': "f''",
   'sup-adjoint': 'A^\\dagger',
