@@ -1,3 +1,7 @@
+---
+layout: default
+---
+
 # Examples of Accessible Formula Narration
 
 <table style="color:black;">
@@ -18,12 +22,3 @@
 </table>
 
 <form><input id='freetex' name='formula' type='text'><input type="submit" value="convert..."></form>
-
-<script src="/tiny-mathml-a11y-demo/LaTeXML-maybeMathjax.js"></script>
-<link rel="stylesheet" title="Github Gist" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
-<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/xml.min.js"></script>
-<script src="/tiny-mathml-a11y-demo/mini-language.js"></script>
-<script src="/tiny-mathml-a11y-demo/mini-narrate.js"></script>
-<script src="/tiny-mathml-a11y-demo/a11y.js"></script>

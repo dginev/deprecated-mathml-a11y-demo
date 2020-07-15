@@ -86,7 +86,7 @@ function handle_input(tex) {
     $("tbody tr:last").before(
       '<tr><td style="font-size: x-large;">' + mathml[0].outerHTML +
       "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre></td><td>" +
-      narration_html + '<br><span style="float:left; position: absolute; font-size:xx-large;" class="remove-tr">🗑</span></td></tr>');
+      narration_html + '<br><span class="remove-tr">🗑</span></td></tr>');
 
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block);

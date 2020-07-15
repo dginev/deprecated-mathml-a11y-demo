@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="{{ site.lang | default: "en-US" }}">
+<html lang="en-US">
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <base href="/tiny-mathml-a11y-demo/">
 {% seo %}
     <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" title="Github Gist" href="https://highlightjs.org/static/demo/styles/github-gist.css">
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
@@ -25,5 +26,12 @@
         {% endif %}
       </footer>
     </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+  <script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/xml.min.js"></script>
+  <script src="assets/js/LaTeXML-maybeMathjax.js"></script>
+  <script src="assets/js/mini-language.js"></script>
+  <script src="assets/js/mini-narrate.js"></script>
+  <script src="assets/js/a11y.js"></script>
   </body>
 </html>
