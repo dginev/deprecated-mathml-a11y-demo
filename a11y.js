@@ -76,27 +76,38 @@ function handle_input(tex) {
     let narration_html = '';
     if (narration_phrase != narration_sentence) {
       narration_html =
-      "<td><span style='font-weight:bold;'>brief:&nbsp;</span>" + narration_phrase +
+      "<span style='font-weight:bold;'>brief:&nbsp;</span>" + narration_phrase +
         "<br><br><span style='font-weight:bold;'>full:&nbsp;</span>" + narration_sentence +
-        "<br><br><span style='font-weight:bold;'>annotation:&nbsp;</span>" + annotation_tree +
-      "</td>"
-    } else {
+        "<br><br><span style='font-weight:bold;'>annotation:&nbsp;</span>" + annotation_tree}
+    else {
       narration_html =
-        "<td>"+narration_phrase+
-        "<br><br><span style='font-weight:bold;'>annotation:&nbsp;</span>" + annotation_tree +
-        "</td>";
-    }
-    $("table tr:last").before(
+        narration_phrase+
+        "<br><br><span style='font-weight:bold;'>annotation:&nbsp;</span>" + annotation_tree; }
+    $("tbody tr:last").before(
       '<tr><td style="font-size: x-large;">' + mathml[0].outerHTML +
-      "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre></td>" +
-      narration_html +
-      "</tr>");
+      "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre></td><td>" +
+      narration_html + '<br><span style="float:left; position: absolute; font-size:xx-large;" class="remove-tr">🗑</span></td></tr>');
+
     document.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightBlock(block);
     });
     if (typeof MathJax != "undefined") { // retypeset doc if we have MathJax loaded
       MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
     }
+    $('tbody tr:not(:last)').hover(function () {
+      $(this).find('span.remove-tr').show();
+    }, function () {
+      $(this).find('span.remove-tr').hide();
+    });
+    $('table').on('click', 'span.remove-tr', function () {
+      $(this).closest('tr').remove();
+    });
+    $('span.remove-tr').hover(function() {
+      $(this).css("cursor", "pointer");
+    }, function() {
+      $(this).css("cursor", "auto");
+    });
+
     $("body").css("cursor", "auto");
     $("html, body").animate({ scrollTop: $(document).height() }, "slow");
   }, "json");
@@ -132,7 +143,8 @@ $(document).ready(function () {
   });
 
   let select_element = '<select id="example_select" name="example">'+options+'</select>';
-  $("table tr:last").after('<tr class="choice"><td>Examples:</td><td>' +select_element+'</td><td><span id="raw-tex"></span></td></tr>');
+  $("tbody tr:last").after('<tr class="choice"><td>Examples:</td><td>' +select_element+'</td><td><span id="raw-tex"></span>'+
+  '<input type="submit" style="margin-left:50px;" id="reset_table" value="clear all"></td></tr>');
 
   $("#example_select").change(function() {
     // convert and grab MathML
@@ -145,5 +157,10 @@ $(document).ready(function () {
     e.preventDefault();
     handle_input($("input#freetex").val());
     return false;
+  });
+  // cleanup UI
+  $("input#reset_table").click(function (e) {
+    e.preventDefault();
+    $("tbody tr:not(:last)").remove();
   });
 });
