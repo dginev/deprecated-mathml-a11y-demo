@@ -76,19 +76,19 @@ function handle_input(tex) {
     let narration_sentence = narrate(mathml, 'sentence');
     let annotation_tree = narrate(mathml, 'annotation');
     let narration_html = '';
-    if (narration_phrase != narration_sentence) {
-      narration_html =
-      "<span class='bold'>brief:&nbsp;</span>" + narration_phrase +
-        "<br><br><span class='bold'>full:&nbsp;</span>" + narration_sentence +
-        "<br><br><span class='bold'>annotation:&nbsp;</span>" + annotation_tree}
+    if (narration_phrase == narration_sentence) {
+      narration_html = narration_phrase; }
     else {
       narration_html =
-        narration_phrase+
-        "<br><br><span class='bold'>annotation:&nbsp;</span>" + annotation_tree; }
+        "<span class='bold'>brief:&nbsp;</span>" + narration_phrase +
+        "<br><br><span class='bold'>full:&nbsp;</span>" + narration_sentence; }
+    narration_html += "<br><br><span class='bold'>annotation:&nbsp;</span>" + annotation_tree +
+      "<br>" + $("span#raw-tex").html() +'<span class="remove-tr">🗑</span>';
+
     $("tbody tr:last").before(
       '<tr><td class="xlarge">' + mathml[0].outerHTML +
-      "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre></td><td>" +
-      narration_html + '<br><span class="remove-tr">🗑</span></td></tr>');
+      "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre></td><td class='narration'>" +
+      narration_html + '</td></tr>');
 
     let code_tr = $("tbody tr:last").prev();
     block = $(code_tr).find("pre code");
@@ -98,9 +98,9 @@ function handle_input(tex) {
       MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
     }
     $('tbody tr:not(:last)').hover(function () {
-      $(this).find('span.remove-tr').show();
+      $(this).find('span.remove-tr').css('display','inline-block');
     }, function () {
-      $(this).find('span.remove-tr').hide();
+      $(this).find('span.remove-tr').css('display', 'none');
     });
     $('table').on('click', 'span.remove-tr', function () {
       $(this).closest('tr').remove();
@@ -147,12 +147,13 @@ $(document).ready(function () {
   $("#example_select").change(function() {
     // convert and grab MathML
     let tex = $(this).val();
-    $("span#raw-tex").html("<span class='bold'>TeX: </span>" +dirty_escape_html(tex));
+    $("span#raw-tex").html("<span class='tex-source'><span class='bold'>tex: </span>" +dirty_escape_html(tex)+'</span>');
     handle_input(tex);
   });
 
   $("form").submit(function (e) {
     e.preventDefault();
+    $("span#raw-tex").html("<span class='tex-source'><span class='bold'>tex: </span>" + dirty_escape_html($("input#freetex").val())+'</span>');
     handle_input($("input#freetex").val());
     return false;
   });
