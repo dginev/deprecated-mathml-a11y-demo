@@ -57,7 +57,8 @@ let a11y_semantic_tex_examples = {
   'integral': "\\lxDeclare[role=FUNCTION]{$f$} \\integral{f(x)}{x}",
 };
 
-// convert a chosen 'tex' input to MathML+annotations via latexml\
+const leading_newline = /^\n+/;
+// convert a chosen 'tex' input to MathML+annotations via latexml
 function handle_input(tex) {
   $("body").css("cursor", "progress");
   $.post("https://latexml.mathweb.org/convert", { // minimal latexml preloads for somewhat usual latex math
@@ -69,28 +70,30 @@ function handle_input(tex) {
     let mathml = $(data.result);
     mathml.removeAttr('alttext'); // table is too wide if kept
     let pretty = $('<code/>', { 'class': "xml" });
-    pretty.text(mathml.html());
+
+    pretty.text(mathml.html().replace(leading_newline,''));
     let narration_phrase = narrate(mathml, 'phrase');
     let narration_sentence = narrate(mathml, 'sentence');
     let annotation_tree = narrate(mathml, 'annotation');
     let narration_html = '';
     if (narration_phrase != narration_sentence) {
       narration_html =
-      "<span style='font-weight:bold;'>brief:&nbsp;</span>" + narration_phrase +
-        "<br><br><span style='font-weight:bold;'>full:&nbsp;</span>" + narration_sentence +
-        "<br><br><span style='font-weight:bold;'>annotation:&nbsp;</span>" + annotation_tree}
+      "<span class='bold'>brief:&nbsp;</span>" + narration_phrase +
+        "<br><br><span class='bold'>full:&nbsp;</span>" + narration_sentence +
+        "<br><br><span class='bold'>annotation:&nbsp;</span>" + annotation_tree}
     else {
       narration_html =
         narration_phrase+
-        "<br><br><span style='font-weight:bold;'>annotation:&nbsp;</span>" + annotation_tree; }
+        "<br><br><span class='bold'>annotation:&nbsp;</span>" + annotation_tree; }
     $("tbody tr:last").before(
-      '<tr><td style="font-size: x-large;">' + mathml[0].outerHTML +
+      '<tr><td class="xlarge">' + mathml[0].outerHTML +
       "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre></td><td>" +
       narration_html + '<br><span class="remove-tr">🗑</span></td></tr>');
 
-    document.querySelectorAll('pre code').forEach((block) => {
-      hljs.highlightBlock(block);
-    });
+    let code_tr = $("tbody tr:last").prev();
+    block = $(code_tr).find("pre code");
+    hljs.highlightBlock(block[0]);
+
     if (typeof MathJax != "undefined") { // retypeset doc if we have MathJax loaded
       MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
     }
@@ -101,11 +104,6 @@ function handle_input(tex) {
     });
     $('table').on('click', 'span.remove-tr', function () {
       $(this).closest('tr').remove();
-    });
-    $('span.remove-tr').hover(function() {
-      $(this).css("cursor", "pointer");
-    }, function() {
-      $(this).css("cursor", "auto");
     });
 
     $("body").css("cursor", "auto");
@@ -143,13 +141,13 @@ $(document).ready(function () {
   });
 
   let select_element = '<select id="example_select" name="example">'+options+'</select>';
-  $("tbody tr:last").after('<tr class="choice"><td>Examples:</td><td>' +select_element+'</td><td><span id="raw-tex"></span>'+
-  '<input type="submit" style="margin-left:50px;" id="reset_table" value="clear all"></td></tr>');
+  $("tbody tr:last").replaceWith('<tr class="choice"><td>Examples:</td><td>' +select_element+'</td><td><span id="raw-tex"></span>'+
+  '<input type="submit" id="reset_table" value="clear all"></td></tr>');
 
   $("#example_select").change(function() {
     // convert and grab MathML
     let tex = $(this).val();
-    $("span#raw-tex").html("<span style='font-weight:bold;'>TeX: </span>" +dirty_escape_html(tex));
+    $("span#raw-tex").html("<span class='bold'>TeX: </span>" +dirty_escape_html(tex));
     handle_input(tex);
   });
 
