@@ -149,7 +149,7 @@ $(document).ready(function () {
   $("#example_select").change(function() {
     // convert and grab MathML
     let tex = $(this).val();
-    $("span#raw-tex").html("<span style='font-weight:bold;'>TeX: </span>"+tex);
+    $("span#raw-tex").html("<span style='font-weight:bold;'>TeX: </span>" +dirty_escape_html(tex));
     handle_input(tex);
   });
 
