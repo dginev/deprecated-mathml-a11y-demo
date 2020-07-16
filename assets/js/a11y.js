@@ -16,8 +16,10 @@ let a11y_other_examples = {
   'square root': '\\sqrt{x}',
 };
 let a11y_mini_spec_examples = {
-  'awkward nesting (1)': "x'_i",
-  'awkward nesting (2)': "\\overline{x}_i",
+  'awkward nesting (1, raw)': "x'_i",
+  'awkward nesting (1)': '\\PostArgsCrosswise{x}{derivative-implicit-variable}{^}{\\derivemark{1}}{index}{_}{i}',
+  'awkward nesting (2, raw)': "\\overline{x}_i",
+  'awkward nesting (2)': '\\PrePostArgCrosswise{x}{median}{\\overline}{index}{_}{i}',
   'base-operator': 'C^n_m',
   'continued fraction': 'a_{0}+\\frac{1}{a_{1}+\\frac{1}{a_{2}+\\cdots}}',
   'derivative, n-th': "\\fnderive{f}{n}",
