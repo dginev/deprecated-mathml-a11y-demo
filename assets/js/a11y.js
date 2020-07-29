@@ -78,7 +78,8 @@ function handle_input(tex) {
     let narration_sentence = narrate(mathml, 'sentence');
     let annotation_tree = narrate(mathml, 'annotation');
     let sre_narration = SRE.toSpeech(mathml[0].outerHTML);
-    let narration_html = "<span class='bold'>SRE:&nbsp;</span>"+sre_narration+"<br><br>";
+    let sre_pre = "<span class='bold'><a href='https://github.com/zorkow/speech-rule-engine'>SRE</a>:&nbsp;</span>";
+    let narration_html = sre_pre+sre_narration+"<br><br>";
     if (narration_phrase == narration_sentence) {
       narration_html += "<span class='bold'>naive:&nbsp;</span>" + narration_phrase; }
     else {
