@@ -63,7 +63,7 @@ let a11y_semantic_tex_examples = {
 function ttsSpeak(btn) {
   let speech = $(btn).nextAll("span.speech:first").text();
   $("body").css("cursor", "progress");
-  fetch('http://tts.deyan.us/api/tts?text=' + encodeURIComponent(speech), {})
+  fetch('https://tts.deyan.us/api/tts?text=' + encodeURIComponent(speech), {})
     .then(function (res) {
       if (!res.ok) {
         console.log("Error: ", res.statusText); }
