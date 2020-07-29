@@ -47,4 +47,12 @@ div.wrapper-modified {
   input#reset_table {
     margin-left:50px;
   }
+
+  span.btn-speak {
+    display: inline-block;
+    padding-right: 0.2em;
+  }
+  audio {
+    height: 20px;
+  }
 }

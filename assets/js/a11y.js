@@ -59,6 +59,32 @@ let a11y_semantic_tex_examples = {
   'integral': "\\lxDeclare[role=FUNCTION]{$f$} \\integral{f(x)}{x}",
 };
 
+// call mozilla/TTS with the content of the preceding span.speech
+function ttsSpeak(btn) {
+  let speech = $(btn).nextAll("span.speech:first").text();
+  $("body").css("cursor", "progress");
+  fetch('http://tts.deyan.us/api/tts?text=' + encodeURIComponent(speech), {})
+    .then(function (res) {
+      if (!res.ok) {
+        console.log("Error: ", res.statusText); }
+      return res.blob()
+    }).then(function (blob) {
+      let audio = $('<audio controls autoplay />');
+      audio.insertAfter($(btn).nextAll("br:first"));
+      audio.attr("src", window.URL.createObjectURL(blob));
+      $(btn).attr('onClick', 'return false;');
+      $("body").css("cursor", "auto");
+    }).catch(function (err) {
+      console.log("Error: ", err);
+      $("body").css("cursor", "auto");
+    });
+  return;
+}
+
+// some HTML boilerplate...
+let speak_btn = "<span class='btn-speak' onClick='ttsSpeak(this); return false'>🔊</span>";
+let sre_pre = "<span class='bold'><a href='https://github.com/zorkow/speech-rule-engine'>SRE</a>:&nbsp;</span>";
+
 const leading_newline = /^\n+/;
 // convert a chosen 'tex' input to MathML+annotations via latexml
 function handle_input(tex) {
@@ -78,14 +104,16 @@ function handle_input(tex) {
     let narration_sentence = narrate(mathml, 'sentence');
     let annotation_tree = narrate(mathml, 'annotation');
     let sre_narration = SRE.toSpeech(mathml[0].outerHTML);
-    let sre_pre = "<span class='bold'><a href='https://github.com/zorkow/speech-rule-engine'>SRE</a>:&nbsp;</span>";
-    let narration_html = sre_pre+sre_narration+"<br><br>";
+    let narration_html = speak_btn + sre_pre + "<span class='speech'>" + sre_narration + "</span>" + "<br><br>";
     if (narration_phrase == narration_sentence) {
-      narration_html += "<span class='bold'>naive:&nbsp;</span>" + narration_phrase; }
+      narration_html += speak_btn + "<span class='bold'>naive:&nbsp;</span>" +
+        "<span class='speech'>"+narration_phrase+"</span>"; }
     else {
       narration_html +=
-        "<span class='bold'>naive brief:&nbsp;</span>" + narration_phrase + '<br><br>'+
-        "<span class='bold'>naive full:&nbsp;</span>" + narration_sentence; }
+        speak_btn + "<span class='bold'>naive brief:&nbsp;</span>" +
+        "<span class='speech'>" + narration_phrase + "</span>" + "<br><br>"+
+        speak_btn + "<span class='bold'>naive full:&nbsp;</span>" +
+        "<span class='speech'>" + narration_sentence +"</span>" + "<br><br>"; }
     narration_html += "<br><br><span class='bold'>annotation:&nbsp;</span>" + annotation_tree +
       "<br>" + $("span#raw-tex").html() +'<span class="remove-tr">🗑</span>';
 
