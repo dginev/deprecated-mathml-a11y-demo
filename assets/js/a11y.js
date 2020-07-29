@@ -77,13 +77,14 @@ function handle_input(tex) {
     let narration_phrase = narrate(mathml, 'phrase');
     let narration_sentence = narrate(mathml, 'sentence');
     let annotation_tree = narrate(mathml, 'annotation');
-    let narration_html = '';
+    let sre_narration = SRE.toSpeech(mathml[0].outerHTML);
+    let narration_html = "<span class='bold'>SRE:&nbsp;</span>"+sre_narration+"<br><br>";
     if (narration_phrase == narration_sentence) {
-      narration_html = narration_phrase; }
+      narration_html += "<span class='bold'>naive:&nbsp;</span>" + narration_phrase; }
     else {
-      narration_html =
-        "<span class='bold'>brief:&nbsp;</span>" + narration_phrase +
-        "<br><br><span class='bold'>full:&nbsp;</span>" + narration_sentence; }
+      narration_html +=
+        "<span class='bold'>naive brief:&nbsp;</span>" + narration_phrase + '<br><br>'+
+        "<span class='bold'>naive full:&nbsp;</span>" + narration_sentence; }
     narration_html += "<br><br><span class='bold'>annotation:&nbsp;</span>" + annotation_tree +
       "<br>" + $("span#raw-tex").html() +'<span class="remove-tr">🗑</span>';
 
