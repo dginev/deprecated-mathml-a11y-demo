@@ -26,6 +26,7 @@ function narrate(math, style) {
 // narrate_semantic($('body'),'phrase','equals(plus(1,2),times(3,minus(5)))')
 
 function narrate_semantic(math, style, semantic) {
+  semantic = semantic && semantic.toString();
   if (semantic && semantic.length>0) { // balanced parens need a context-free grammar here, but for the demo we regex and whistle.
     let operator_call = /^([^(]+)\((.*)\)$/;
     let op_arg;

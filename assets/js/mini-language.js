@@ -26,6 +26,16 @@ function list_conj(conj, args) {
 }
 function list_and(args) {return list_conj("and", args);}
 function list_or(args) { return list_conj("or", args); }
+function numeral(s) {
+  s = s.toString();
+  let last_c = s.charAt(s.length - 1);
+  switch (last_c) {
+    case '1': if (s != "11") return s+'-st';
+    case '2': if (s != "12") return s +'-nd';
+    case '3': if (s != "13") return s+'-rd';
+    default: return s+"-th";
+  }
+}
 
 // np = noun phrase
 function np_of(op, arg) {
@@ -57,7 +67,16 @@ function wrapped(op, arg) {
 function narrate_symbol(textsymbol) {
   switch(textsymbol) {
     case '…': return 'and so on';
-    default: return textsymbol;
+    case '′': return 'prime';
+    case '(': return 'open parenthesis';
+    case '(': return 'close parenthesis';
+    default: {
+      if (textsymbol.length == 1 && textsymbol != textsymbol.toLowerCase()) {
+        return 'upper '+textsymbol;
+      } else {
+        return textsymbol;
+      }
+    }
   }
 }
 function narrate_by_table(op, arg_narrations, style) {
@@ -86,6 +105,8 @@ function default_narrate_switch(op, arg_narrations) {
     case 'math':
     case 'mrow':
       return arg_narrations.join(" ");
+    case 'msubsup':
+      return [arg_narrations[0], "Subscript", arg_narrations[1], "Superscript", arg_narrations[2]].join(" ");
     case 'plus':
     case 'minus':
     case 'times':
@@ -125,6 +146,8 @@ function default_narrate_switch(op, arg_narrations) {
       return the_np_from_to(op, arg_narrations);
     case 'integral':
       return the_np(op, arg_narrations[0] + ' d ' + arg_narrations[1]);
+    case 'derivative-implicit-variable':
+      return infix(" derivative of ", [numeral(arg_narrations[1]), arg_narrations[0]]);
     default:
       // considered as default:
       // case 'msub':
@@ -142,6 +165,8 @@ function phrase_narrate_switch(op, arg_narrations) {
     case 'msub':
     case 'msup':
       return infix_dashed(op, arg_narrations);
+    case 'msubsup':
+      return [arg_narrations[0], "Subscript", arg_narrations[1], "Superscript", arg_narrations[2]].join(" ");
     case 'msqrt':
     case 'square-root':
       return prefix('square root', arg_narrations[0]);
@@ -181,7 +206,9 @@ function phrase_narrate_switch(op, arg_narrations) {
       return np_of(op,arg_narrations[0]);
     case 'integral':
       return np_of(op,arg_narrations[0]+' d '+arg_narrations[1]);
+    case 'derivative-implicit-variable':
+      return infix(" derivative of ", [numeral(arg_narrations[1]), arg_narrations[0]]);
     default:
-      return wrapped(op, arg_narrations.join(", "));
+      return np_of(op, arg_narrations.join(", "));
   }
 }
