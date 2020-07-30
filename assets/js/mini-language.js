@@ -28,11 +28,20 @@ function list_and(args) {return list_conj("and", args);}
 function list_or(args) { return list_conj("or", args); }
 function numeral(s) {
   s = s.toString();
-  let last_c = s.charAt(s.length - 1);
-  switch (last_c) {
-    case '1': if (s != "11") return s+'-st';
-    case '2': if (s != "12") return s +'-nd';
-    case '3': if (s != "13") return s+'-rd';
+  switch (s) {
+    case '1': return 'first';
+    case '21': return 'twenty-first';
+    case '2': return 'second';
+    case '22': return 'twenty-second';
+    case '3': return 'third';
+    case '23': return 'twenty-third';
+    case '4': return 'fourth';
+    case '5': return 'fifth';
+    case '6': return 'sixth';
+    case '7': return 'seventh';
+    case '8': return 'eighth';
+    case '9': return 'nineth';
+    case '10': return 'tenth';
     default: return s+"-th";
   }
 }
