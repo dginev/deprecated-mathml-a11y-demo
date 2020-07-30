@@ -61,7 +61,7 @@ let a11y_semantic_tex_examples = {
 
 // call mozilla/TTS with the content of the preceding span.speech
 function ttsSpeak(btn) {
-  let speech = $(btn).nextAll("span.speech:first").text();
+  let speech = $(btn).nextAll("span.speech:first").text() + " .";
   $("body").css("cursor", "progress");
   fetch('https://tts.deyan.us/api/tts?text=' + encodeURIComponent(speech), {})
     .then(function (res) {
