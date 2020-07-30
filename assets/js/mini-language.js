@@ -193,6 +193,7 @@ function phrase_narrate_switch(op, arg_narrations) {
     case 'element-of':
       return infix('in', arg_narrations);
     case 'multirelation':
+    case 'index':
       return arg_narrations.join(" ");
     case 'open-interval':
     case 'closed-interval':
