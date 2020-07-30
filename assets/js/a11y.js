@@ -66,8 +66,10 @@ function ttsSpeak(btn) {
   fetch('https://tts.deyan.us/api/tts?text=' + encodeURIComponent(speech), {})
     .then(function (res) {
       if (!res.ok) {
-        console.log("Error: ", res.statusText); }
-      return res.blob()
+        alert("Server generating mozilla/TTS speech may be offline, as it is hosted on a personal machine. Please ask admin to enable.");
+        return false; }
+      else {
+        return res.blob(); }
     }).then(function (blob) {
       let audio = $('<audio controls autoplay />');
       audio.insertAfter($(btn).nextAll("br:first"));
@@ -75,7 +77,7 @@ function ttsSpeak(btn) {
       $(btn).attr('onClick', 'return false;');
       $("body").css("cursor", "auto");
     }).catch(function (err) {
-      console.log("Error: ", err);
+      alert("Server generating mozilla/TTS speech may be offline, as it is hosted on a personal machine. Please ask admin to enable.");
       $("body").css("cursor", "auto");
     });
   return;
