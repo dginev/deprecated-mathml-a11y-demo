@@ -91,7 +91,7 @@ const leading_newline = /^\n+/;
 // convert a chosen 'tex' input to MathML+annotations via latexml
 function handle_input(tex) {
   $("body").css("cursor", "progress");
-  $.post("https://latexml.mathweb.org/convert", { // minimal latexml preloads for somewhat usual latex math
+  $.post("https://latexml.mathweb.org/a11y/convert", { // minimal latexml preloads for somewhat usual latex math
     "tex": tex,
     "timeout": "10", "format": "html5", "whatsin": "math", "whatsout": "math", "pmml": "",
     "cache_key": "a11y_showcase",
