@@ -9,6 +9,8 @@ function default_narrate_switch(op, arg_narrations, fixity) {
       return infix("Superscript", arg_narrations);
     case 'msubsup':
       return [arg_narrations[0], "Subscript", arg_narrations[1], "Superscript", arg_narrations[2]].join(" ");
+    case 'mover':
+      return "ModifyingAbove " + arg_narrations[0] + " With " + arg_narrations[1];
     case 'element-of':
       return infix('is an element of', arg_narrations);
     case 'index':

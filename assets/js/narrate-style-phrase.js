@@ -13,6 +13,8 @@ function phrase_narrate_switch(op, arg_narrations, fixity) {
       return infix("Superscript", arg_narrations);
     case 'msubsup':
       return [arg_narrations[0], "Subscript", arg_narrations[1], "Superscript", arg_narrations[2]].join(" ");
+    case 'mover':
+      return arg_narrations[0]+" over"+arg_narrations[1];
     case 'divide':
       return infix('divided by', arg_narrations);
     case 'binomial':
