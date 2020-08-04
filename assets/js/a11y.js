@@ -99,26 +99,26 @@ function handle_input(tex) {
   }, function (data) {
     let mathml = $(data.result);
     mathml.removeAttr('alttext'); // table is too wide if kept
-    let pretty = $('<code/>', { 'class': "xml" });
 
-    pretty.text(mathml.html().replace(leading_newline,''));
     let narration_phrase = narrate(mathml, 'phrase');
     let narration_sentence = narrate(mathml, 'sentence');
     let annotation_tree = narrate(mathml, 'annotation');
     let sre_narration = SRE.toSpeech(mathml[0].outerHTML);
-    let narration_html = speak_btn + sre_pre + "<span class='speech'>" + sre_narration + "</span>" + "<br><br>";
+    let narration_html = sre_pre + "<br>" + speak_btn+"<span class='speech'>" + sre_narration + "</span>" + "<br><br>";
     if (narration_phrase == narration_sentence) {
-      narration_html += speak_btn + "<span class='bold'>naive:&nbsp;</span>" +
+      narration_html += "<span class='bold'>semantic:&nbsp;</span><br>" + speak_btn +
         "<span class='speech'>"+narration_phrase+"</span>"; }
     else {
       narration_html +=
-        speak_btn + "<span class='bold'>naive brief:&nbsp;</span>" +
+        "<span class='bold'>semantic brief:&nbsp;</span><br>" + speak_btn +
         "<span class='speech'>" + narration_phrase + "</span>" + "<br><br>"+
-        speak_btn + "<span class='bold'>naive full:&nbsp;</span>" +
+        "<span class='bold'>semantic full:&nbsp;</span><br>" + speak_btn +
         "<span class='speech'>" + narration_sentence +"</span>" + "<br><br>"; }
     narration_html += "<br><br><span class='bold'>annotation:&nbsp;</span>" + annotation_tree +
       "<br>" + $("span#raw-tex").html() +'<span class="remove-tr">🗑</span>';
 
+    let pretty = $('<code/>', { 'class': "xml" });
+    pretty.text(mathml.html().replace(leading_newline, ''));
     $("tbody tr:last").before(
       '<tr><td class="xlarge">' + mathml[0].outerHTML +
       "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre></td><td class='narration'>" +

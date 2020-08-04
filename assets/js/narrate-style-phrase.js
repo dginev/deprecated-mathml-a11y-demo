@@ -32,7 +32,7 @@ function phrase_narrate_switch(op, arg_narrations, fixity) {
       return infix(" derivative of ", [numeral(arg_narrations[1]), arg_narrations[0]]);
     default:
       switch (fixity) {
-        case 'prefix': return np_of(op, arg_narrations[0]);
+        case 'prefix': return prefix(op, arg_narrations[0]);
         case 'infix':
         case 'nary-infix':
           return infix(op, arg_narrations);

@@ -23,6 +23,9 @@ function obtain_arg(target_arg, context, path) {
 // describe fixity based on descendent paths to each argument,
 // as ordered in the semantic tree
 function compute_fixity(args, top_node) {
+  let cached = top_node.getAttribute("data-fixity");
+  if (cached) {
+    return cached; }
   let presentation_trace = [];
   let op_node;
   $.each(args, function (idx, arg) {
@@ -33,6 +36,8 @@ function compute_fixity(args, top_node) {
   });
   let paths_str = presentation_trace.join(",");
   switch (paths_str) {
+    case "": return "";
+    case "literal": return "";
     case "1,2": // e.g. -1
       return "prefix";
     case "2,1": // e.g. factorial
@@ -124,6 +129,9 @@ function narrate_semantic(math, style, semantic) {
     // then narrate constituents and dispatch to this notation handler:
     let arg_narrations = [];
     let fixity = compute_fixity(args, context);
+    if (fixity.length > 0) {
+      math.attr("data-fixity", fixity); }
+
     $.each(args, function (idx, arg) {
       if (typeof arg === 'string') {
         arg_narrations.push(arg); }

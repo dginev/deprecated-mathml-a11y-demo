@@ -1,13 +1,18 @@
 // -- translating to English, the lingustics-near bits
 // if we have an "operator" word, we often use a generalized form when
 // building a noun phrase for the "result" of that operator.
-function result_word_for_operation(op) {
+function infix_op_result_word(op) {
   switch(op) {
     case 'plus': return 'sum';
     case 'minus': return 'difference';
     case 'times': return 'product';
     case 'divide': return 'division';
     case 'equals': return 'equality';
+    default: // default as-is
+      return op; } }
+function prefix_op_word(op) {
+  switch (op) {
+    case 'minus': return 'negative';
     default: // default as-is
       return op; } }
 function list_conj(conj, args) {
@@ -50,7 +55,7 @@ function numeral(s) {
 function np_of(op, arg) {
   return op + " of " + arg; }
 function the_np(op,arg) {
-  let concept = result_word_for_operation(op);
+  let concept = infix_op_result_word(op);
   let the_concept = concept;
   let end_concept = "end-" + concept;
   if (!concept.startsWith("the ")) {
@@ -62,7 +67,7 @@ function the_np(op,arg) {
     end_concept = end_concept.slice(0, space_idx); }
   return the_concept + " of " + arg + " "+end_concept; }
 function the_np_from_to(op, args) {
-  let concept = result_word_for_operation(op);
+  let concept = infix_op_result_word(op);
   let the_concept = concept;
   let end_concept = "end-" + concept;
   if (!concept.startsWith("the ")) {
@@ -84,7 +89,7 @@ function infix_dashed(op, args) {
 function postfix(op, arg) {
   return arg+" "+op; }
 function prefix(op, arg) {
-  return op + " " +arg; }
+  return prefix_op_word(op) + " " +arg; }
 function wrapped(op, arg) {
   if (op && op.length>0) {
     return op+"-start "+arg+" "+op+"-end"; }
