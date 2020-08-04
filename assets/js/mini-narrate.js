@@ -36,8 +36,9 @@ function compute_fixity(args, top_node) {
   });
   let paths_str = presentation_trace.join(",");
   switch (paths_str) {
-    case "": return "";
-    case "literal": return "";
+    case "":
+    case "literal":
+      return ""; // atomic case, no fixity to speak of
     case "1,2": // e.g. -1
       return "prefix";
     case "2,1": // e.g. factorial
@@ -51,6 +52,7 @@ function compute_fixity(args, top_node) {
         case 'msub': return "subfix";
         default: return 'mixfix';
       }
+    case "1":
     case "literal,2": // e.g. intervals |x|
     case "literal,2,4": // e.g. intervals (a,b)
       return "fenced";

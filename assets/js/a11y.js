@@ -116,7 +116,9 @@ function handle_input(tex) {
         "<span class='speech'>" + narration_sentence +"</span>" + "<br><br>"; }
     narration_html += "<br><br><span class='bold'>annotation:&nbsp;</span>" + annotation_tree +
       "<br>" + $("span#raw-tex").html() +'<span class="remove-tr">🗑</span>';
-
+    // we won't need to render the data-arg-path attributes, and any other runtime attributes we end up with.
+    mathml.find("[data-arg-path]").each(function (idx,el) {
+      el.removeAttribute('data-arg-path'); });
     let pretty = $('<code/>', { 'class': "xml" });
     pretty.text(mathml.html().replace(leading_newline, ''));
     $("tbody tr:last").before(
