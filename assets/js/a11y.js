@@ -29,13 +29,13 @@ let a11y_mini_spec_examples = {
   'fenced-stacked, binomial': '\\binom{n}{m}',
   'fenced-stacked, Eulerian numbers': '\\left< n \\atop k \\right>',
   'fenced-stacked, multinomial': '\\binom{n}{m_1,m_2,m_3}',
-  'fenced-sub, Pochhammer': '\\left(a\\right)_n',
+  'fenced-sub, Pochhammer': '\\left(a \\right)_n',
   'fenced-table, 3j symbol': '\\left(\\begin{array}{ccc}j_1& j_2 &j_3 \\\\ m_1 &m_2 &m_3\\end{array}\\right)',
   'fenced, abs': '|x|',
   'fenced, Clebsch-Gordan': '(j_1 m_1 j_2 m_2 | j_1 j_2 j_3 m_3)|',
   'fenced, determinant': '\\determinant{X}',
-  'fenced, inner product': '\\innerp{a}{b}',
-  'fenced, Legendre symbol': '\\legendre{n}{p}',
+  'fenced, inner product': '\\left<\\mathbf{a},\\mathbf{b}\\right>',
+  'fenced, Legendre symbol': '\\left(n|p\\right)',
   'fenced, norm': '\\norm{x}',
   'fenced, open-interval (2)': ']a, b[',
   'fenced, open-interval': '(a,b)',
@@ -56,7 +56,7 @@ let a11y_mini_spec_examples = {
   'unary minus': '-a',
 }
 let a11y_semantic_tex_examples = {
-  'integral': "\\lxDeclare[role=FUNCTION]{$f$} \\integral{f(x)}{x}",
+  'integral': "\\integral{f(x)}{x}",
 };
 
 // call mozilla/TTS with the content of the preceding span.speech
@@ -95,7 +95,7 @@ function handle_input(tex) {
     "tex": tex,
     "timeout": "10", "format": "html5", "whatsin": "math", "whatsout": "math", "pmml": "",
     "cache_key": "a11y_showcase",
-    "preload": ["LaTeX.pool", "article.cls", "latexml.sty", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty", "a11ymark.sty", 'array.sty']
+    "preload": ["LaTeX.pool", "article.cls", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty", "a11ymark.sty", 'array.sty']
   }, function (data) {
     let mathml = $(data.result);
     mathml.removeAttr('alttext'); // table is too wide if kept
