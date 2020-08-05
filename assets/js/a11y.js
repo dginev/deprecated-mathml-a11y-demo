@@ -40,7 +40,7 @@ let a11y_mini_spec_examples = {
   'fenced, open-interval (2)': ']a, b[',
   'fenced, open-interval': '(a,b)',
   'fenced, sequence': '\\lbrace a_n\\rbrace',
-  'function (A)': 'A(a,b;z|q)',
+  'function (A)': 'A \\left( a,b;z|q \\right)',
   'function BesselJ': 'J_\\nu(z)',
   'function curried BesselJ': 'J_\\nu(z)',
   'indexing': 'a_i',
