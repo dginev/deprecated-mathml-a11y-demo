@@ -91,6 +91,9 @@ const leading_newline = /^\n+/;
 // convert a chosen 'tex' input to MathML+annotations via latexml
 function handle_input(tex) {
   $("body").css("cursor", "progress");
+  let log_container = $("div.latexml-log");
+  log_container.hide();
+  log_container.html('');
   $.post("https://latexml.mathweb.org/a11y/convert", { // minimal latexml preloads for somewhat usual latex math
     "tex": '\\('+tex+'\\)',
     "timeout": "10", "format": "html5", "whatsin": "fragment", "whatsout": "math", "pmml": "",
@@ -99,6 +102,10 @@ function handle_input(tex) {
     "preamble": "literal:" + $("#preamble").val()+"\n\\begin{document}\n",
     "postamble": "literal:\n\\end{document}",
   }, function (data) {
+    if (data.status_code == 3) {
+      log_container.html("<span>"+data.log.trim().replaceAll("\n","<br>")+"</span>");
+      log_container.show();
+      return; }
     let mathml = $(data.result);
     mathml.removeAttr('alttext'); // table is too wide if kept
 
@@ -143,10 +150,14 @@ function handle_input(tex) {
     $('table').on('click', 'span.remove-tr', function () {
       $(this).closest('tr').remove();
     });
-
-    $("body").css("cursor", "auto");
     $("html, body").animate({ scrollTop: $(document).height() }, "slow");
-  }, "json");
+  }, "json")
+    .fail(function () {
+      alert("failed to convert.");
+    })
+    .always(function() {
+      $("body").css("cursor", "auto");
+    });
 }
 
 // quick auxiliary for escaping the tex source strings...

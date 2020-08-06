@@ -27,3 +27,4 @@ Rendered | MathML [4?](https://www.w3.org/community/mathml4/), [semantics-mini](
 <input id='freetex' name='formula' type='text'><input type="submit" value="convert...">
 <button type="button" class='collapsible'>edit preamble</button>
 </form>
+<div class="latexml-log"></div>

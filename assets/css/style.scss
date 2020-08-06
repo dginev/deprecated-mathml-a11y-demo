@@ -65,4 +65,12 @@ div.wrapper-modified {
     resize: none;
     overflow-y: scroll;
   }
+  div.latexml-log {
+    margin-top:15px;
+    span {
+      padding: 1em;
+      border: 1px solid red;
+      display: table-cell;
+    }
+  }
 }
