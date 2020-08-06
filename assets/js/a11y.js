@@ -92,10 +92,12 @@ const leading_newline = /^\n+/;
 function handle_input(tex) {
   $("body").css("cursor", "progress");
   $.post("https://latexml.mathweb.org/a11y/convert", { // minimal latexml preloads for somewhat usual latex math
-    "tex": tex,
-    "timeout": "10", "format": "html5", "whatsin": "math", "whatsout": "math", "pmml": "",
+    "tex": '\\('+tex+'\\)',
+    "timeout": "10", "format": "html5", "whatsin": "fragment", "whatsout": "math", "pmml": "",
     "cache_key": "a11y_showcase",
-    "preload": ["LaTeX.pool", "article.cls", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty", "a11ymark.sty", 'array.sty']
+    "preload": ["LaTeX.pool", "article.cls", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty",'array.sty', "a11ymark.sty"],
+    "preamble": "literal:" + $("#preamble").val()+"\n\\begin{document}\n",
+    "postamble": "literal:\n\\end{document}",
   }, function (data) {
     let mathml = $(data.result);
     mathml.removeAttr('alttext'); // table is too wide if kept

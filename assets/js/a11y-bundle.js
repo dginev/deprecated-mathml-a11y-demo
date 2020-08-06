@@ -10,6 +10,8 @@
 
 {%include_relative sre_browser.js %}
 
+{%include_relative collapsible.js %}
+
 {%include_relative mini-language.js %}
 
 {%include_relative narrate-style-full.js %}

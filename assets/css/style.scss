@@ -55,4 +55,14 @@ div.wrapper-modified {
   audio {
     height: 20px;
   }
+
+  /* Style the collapsible content. Note: hidden by default */
+  #preamble {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    width: 100%;
+    resize: none;
+    overflow-y: scroll;
+  }
 }
