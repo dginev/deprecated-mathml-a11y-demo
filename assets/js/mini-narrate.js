@@ -40,6 +40,8 @@ function compute_fixity(args, top_node) {
     case "literal":
       return ""; // atomic case, no fixity to speak of
     case "1,2": // e.g. -1
+    case "1,3": // e.g. \sin \pi with invisible apply
+    case "1,3/2": // \sin (x) with invisible apply
       return "prefix";
     case "2,1": // e.g. factorial
       return "postfix";
