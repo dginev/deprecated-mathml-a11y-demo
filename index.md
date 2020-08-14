@@ -14,7 +14,7 @@ Rendered | MathML [4?](https://www.w3.org/community/mathml4/), [semantics-mini](
 <textarea id='preamble' name='preamble' rows="10">
 \pragma{FUNCTION}{f,g,h}
 \pragma{ID}{a,b,c,d,n,m,x,y,z}
-\pragma{index}{?_?}
+%\pragma{index}{?_?}
 % \pragma{power}{?^?}
 \pragma{Pochhamer-symbol,ID}{\left(?\right)_?}
 \pragma{Legendre-symbol,ID}{\left(?|?\right)}
