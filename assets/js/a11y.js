@@ -63,7 +63,7 @@ let a11y_semantic_tex_examples = {
 function ttsSpeak(btn) {
   let speech = $(btn).nextAll("span.speech:first").text() + " .";
   $("body").css("cursor", "progress");
-  fetch('https://tts.deyan.us/api/tts?text=' + encodeURIComponent(speech), {})
+  fetch('https://corpora.mathweb.org/api/tts?text=' + encodeURIComponent(speech), {})
     .then(function (res) {
       if (!res.ok) {
         alert("Server generating mozilla/TTS speech may be offline, as it is hosted on a personal machine. Please ask admin to enable.");
