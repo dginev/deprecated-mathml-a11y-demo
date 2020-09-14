@@ -42,7 +42,6 @@ let a11y_mini_spec_examples = {
   'fenced, sequence': '\\lbrace a_n\\rbrace',
   'function (A)': 'A \\left( a,b;z|q \\right)',
   'function BesselJ': 'J_\\nu(z)',
-  'function curried BesselJ': 'J_\\nu(z)',
   'indexing': 'a_i',
   'inner product': '\\mathbf{a}\\cdot\\mathbf{b}',
   'integrals': '\\int\\frac{dr}{r}',

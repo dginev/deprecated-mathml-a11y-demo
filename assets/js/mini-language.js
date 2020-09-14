@@ -131,3 +131,27 @@ function narrate_by_table(op, arg_narrations, style, fixity) {
       return default_narrate_switch(op, arg_narrations, fixity);
   }
 }
+
+// unpack potentially nested operators (nested arguments not yet supported)
+function narrate_by_structure(args, semantic, context, style) {
+  let fixity = compute_fixity(args, context);
+  let arg_narrations = [];
+  $.each(args, function (idx, arg) {
+    if (typeof arg === 'string') {
+      arg_narrations.push(arg); }
+    else if (Array.isArray(arg)) {
+      arg_narrations.push(narrate_by_structure(arg, semantic, context, style)); }
+    else {
+      arg_narrations.push(narrate($(arg), style));
+    }
+  });
+  let narration;
+  op_key = arg_narrations.shift();
+  if (op_key && op_key.length > 0) {
+    if (arg_narrations.length == 0) {
+      narration = narrate_symbol(op_key); }
+    else {
+      narration = narrate_by_table(op_key, arg_narrations, style, fixity); } }
+  else {
+    narration = 'failed_to_narrate:(' + semantic + ')';  }
+  return narration; }

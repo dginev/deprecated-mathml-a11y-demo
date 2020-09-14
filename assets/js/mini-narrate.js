@@ -29,7 +29,7 @@ function compute_fixity(args, top_node) {
   let presentation_trace = [];
   let op_node;
   $.each(args, function (idx, arg) {
-    if (typeof arg === 'string') {
+    if (Array.isArray(arg) || (typeof arg === 'string')) {
       presentation_trace.push('literal'); }
     else {
       presentation_trace.push($(arg).data('arg-path')); }
@@ -69,6 +69,61 @@ function compute_fixity(args, top_node) {
   }
 }
 
+function get_balanced_chunks(text) {
+  let chunks = [];
+  let chunk = '';
+  let level = 0;
+  for (const c of text) {
+    switch (c) {
+      case '(':
+        if (level == 0) {
+          if (chunk.length > 0) { chunks.push(chunk); }
+          chunk = ''; }
+        else {
+          chunk += c; }
+        level+=1;
+        break;
+      case ')':
+        level-=1;
+        if (level==0) {
+          if (chunk.length > 0) { chunks.push(chunk); }
+          chunk = ''; }
+        else {
+          chunk += c }
+        break;
+      default:
+        chunk += c; } }
+  if (chunk.length > 0) {
+    chunks.push(chunk); }
+  return chunks; }
+
+function split_balanced_chunks(text) {
+  let pieces = [];
+  let piece = '';
+  let level = 0;
+  for (const c of text) {
+    switch (c) {
+      case ',':
+        if (level == 0) {
+          pieces.push(piece); piece = '';
+        }
+        else { piece += c; }
+        break;
+      case '(':
+        level += 1;
+        piece += c;
+        break;
+      case ')':
+        level -= 1;
+        piece += c;
+        break;
+      default:
+        piece += c; } }
+  if (piece && piece.length > 0) {
+    pieces.push(piece); }
+  return pieces; }
+
+
 // We narrate to a "style"
 function narrate(math, style) {
   if (!math) { return '';}
@@ -82,77 +137,43 @@ function narrate(math, style) {
   return narration.replace(spaced_letter, ' "$1"$2'); }
 
 function narrate_semantic(math, style, semantic) {
+  let context = math[0];
   semantic = semantic && semantic.toString();
   if (semantic && semantic.length>0) { // balanced parens need a context-free grammar here, but for the demo we regex and whistle.
-    let operator_call = /^([^(]+)\((.*)\)$/;
-    let op_arg;
-    let arg_body = semantic.replace(operator_call, function (m0, m1, m2) { op_arg=m1; return m2;});
-    // we can't just split by coma, we need to balance any possible parens...
-    let pieces = [op_arg];
-    let piece='';
-    let open_stack = 0;
-    for (const c of arg_body) {
-      switch (c) {
-      case ',':
-        if (open_stack == 0) {
-          pieces.push(piece); piece = ''; }
-        else { piece+=c;}
-        break;
-      case '(':
-        open_stack+=1;
-        piece+=c;
-        break;
-      case ')':
-        open_stack-=1;
-        piece += c;
-        break;
-      default:
-        piece += c; } }
-    if (piece && piece.length>0) { // wrap up
-      pieces.push(piece); }
     let args = [];
-    let context = math[0];
-    $.each(pieces, function (idx, arg) {
-      if (!arg) { return true; } // continue on undefined arguments
-      // if any of the args contains () they need to be expanded recursively, do so
-      if (arg.indexOf('(') > -1 || arg.indexOf(')') > -1) {
-        // independent fragment, call a sandboxed narrate, and include the string directly
-        args.push(narrate_semantic(math, style, arg)); }
-      else if (!arg.startsWith('#')) { // literal
-        args.push(arg); }
-      else {
-        arg = arg.substr(1);
-        let arg_node = obtain_arg(arg, context);
-        if (arg_node) {
-          args.push(arg_node); }
+    let arg_chunks = get_balanced_chunks(semantic);
+    for (const arg_body of arg_chunks) {
+      let pieces = [];
+      // if we have multiple arg bodies, this is a
+      // higher-order / curried operator and we need to nest further
+      pieces = pieces.concat(split_balanced_chunks(arg_body));
+      for (const arg of pieces) {
+        if (!arg) { continue; }
+        // if any of the args contains () they need to be expanded recursively, do so
+        if (arg.indexOf('(') > -1 || arg.indexOf(')') > -1) {
+          // independent fragment, call a sandboxed narrate, and include the string directly
+          args.push(narrate_semantic(math, style, arg)); }
+        else if (!arg.startsWith('#')) { // literal
+          args.push(arg); }
         else {
-          args.push("missing_arg:"+arg); } }
-    });
-
+          arg_val = arg.substr(1);
+          let arg_node = obtain_arg(arg_val, context);
+          if (arg_node) {
+            args.push(arg_node); }
+          else {
+            args.push("missing_arg:" + arg_val); } }
+      };
+      if (args.length > 1) {
+        args = [args]; }
+      pieces = []; }
+    if (args.length == 1 && Array.isArray(args[0])) {
+      args = args[0]; }
     // now that we have all arg nodes, figure out the fixity of the notation
     // then narrate constituents and dispatch to this notation handler:
-    let arg_narrations = [];
     let fixity = compute_fixity(args, context);
     if (fixity.length > 0) {
       math.attr("data-fixity", fixity); }
-
-    $.each(args, function (idx, arg) {
-      if (typeof arg === 'string') {
-        arg_narrations.push(arg); }
-      else {
-        arg_narrations.push(narrate($(arg), style)); }
-    });
-
-    // TODO: We need a great XPath here to avoid descending into data-semantic nodes. "exclude" requires XPath 3 which we don't have access to.
-    // crutch for now, to go 1 or 2 levels down only.
-    op_key = arg_narrations.shift();
-    if (op_key && op_key.length>0) {
-      if (arg_narrations.length == 0) {
-        narration = narrate_symbol(op_key); }
-      else {
-        narration = narrate_by_table(op_key, arg_narrations, style, fixity); } }
-    else {
-      narration = 'failed_to_narrate:(' + semantic+')'; }
+    narration = narrate_by_structure(args, semantic, context, style);
   } else {
     // descend in children, assuming independence
     let children = $(math).children();
