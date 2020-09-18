@@ -58,11 +58,22 @@ let a11y_semantic_tex_examples = {
   'integral': "\\integral{f(x)}{x}",
 };
 
+var tts_url = "https://tts.deyan.us";
+$.ajax({
+  type: "HEAD",
+  async: true,
+  url: tts_url,
+}).done(function (message, text, jqXHR) {
+  console.log("tts.deyan.us is up, GPU tts is available.");
+}).fail(function () {
+  tts_url = "https://corpora.mathweb.org";
+  console.log("tts.deyan.us is down, falling back to CPU tts (slower).");
+});
 // call mozilla/TTS with the content of the preceding span.speech
 function ttsSpeak(btn) {
   let speech = $(btn).nextAll("span.speech:first").text() + " .";
   $("body").css("cursor", "progress");
-  fetch('https://corpora.mathweb.org/api/tts?text=' + encodeURIComponent(speech), {})
+  fetch(tts_url+'/api/tts?text=' + encodeURIComponent(speech), {})
     .then(function (res) {
       if (!res.ok) {
         alert("Server generating mozilla/TTS speech may be offline, as it is hosted on a personal machine. Please ask admin to enable.");
@@ -86,6 +97,8 @@ function ttsSpeak(btn) {
 let speak_btn = "<span class='btn-speak' onClick='ttsSpeak(this); return false'>🔊</span>";
 let sre_pre = "<span class='bold'><a href='https://github.com/zorkow/speech-rule-engine'>SRE</a>:&nbsp;</span>";
 
+var latexml_convert_url = "https://latexml.mathweb.org/a11y/convert";
+
 const leading_newline = /^\n+/;
 // convert a chosen 'tex' input to MathML+annotations via latexml
 function handle_input(tex) {
@@ -93,7 +106,7 @@ function handle_input(tex) {
   let log_container = $("div.latexml-log");
   log_container.hide();
   log_container.html('');
-  $.post("https://latexml.mathweb.org/a11y/convert", { // minimal latexml preloads for somewhat usual latex math
+  $.post(latexml_convert_url, { // minimal latexml preloads for somewhat usual latex math
     "tex": '\\('+tex+'\\)',
     "timeout": "10", "format": "html5", "whatsin": "fragment", "whatsout": "math", "pmml": "",
     "cache_key": "a11y_showcase",
