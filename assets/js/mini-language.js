@@ -89,7 +89,11 @@ function infix_dashed(op, args) {
 function postfix(op, arg) {
   return arg+" "+op; }
 function prefix(op, arg) {
-  return prefix_op_word(op) + " " +arg; }
+  let op_word = prefix_op_word(op);
+  if (op_word.includes(' of ')) {
+    return op_word + " of " + arg; }
+  else {
+    return op_word + " " +arg; } }
 function wrapped(op, arg) {
   if (op && op.length>0) {
     return op+"-start "+arg+" "+op+"-end"; }
