@@ -97,8 +97,9 @@ function ttsSpeak(btn) {
 let speak_btn = "<span class='btn-speak' onClick='ttsSpeak(this); return false'>🔊</span>";
 let sre_pre = "<span class='bold'><a href='https://github.com/zorkow/speech-rule-engine'>SRE</a>:&nbsp;</span>";
 
-var latexml_convert_url = "https://latexml.mathweb.org/a11y/convert";
-
+var latexml_convert_url = "https://latexml.mathweb.org/convert";
+var latexml_a11y_url = "https://latexml.mathweb.org/a11y/convert";
+var preloads_base = ["LaTeX.pool", "article.cls", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty", 'array.sty']
 const leading_newline = /^\n+/;
 // convert a chosen 'tex' input to MathML+annotations via latexml
 function handle_input(tex) {
@@ -106,11 +107,20 @@ function handle_input(tex) {
   let log_container = $("div.latexml-log");
   log_container.hide();
   log_container.html('');
-  $.post(latexml_convert_url, { // minimal latexml preloads for somewhat usual latex math
+  let preloads_current = preloads_base.slice(0);
+  let post_url;
+  if ($('#a11y-mode').is(":checked")) {
+    post_url = latexml_a11y_url;
+    preloads_current.push("a11ymark.sty");
+  } else {
+    post_url = latexml_convert_url;
+    preloads_current = preloads_base;
+  }
+  $.post(post_url, { // minimal latexml preloads for somewhat usual latex math
     "tex": '\\('+tex+'\\)',
     "timeout": "10", "format": "html5", "whatsin": "fragment", "whatsout": "math", "pmml": "",
     "cache_key": "a11y_showcase",
-    "preload": ["LaTeX.pool", "article.cls", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty",'array.sty', "a11ymark.sty"],
+    "preload": preloads_current,
     "preamble": "literal:" + $("#preamble").val()+"\n\\begin{document}\n",
     "postamble": "literal:\n\\end{document}",
   }, function (data) {

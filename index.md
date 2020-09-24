@@ -26,5 +26,6 @@ Rendered | MathML [4?](https://www.w3.org/community/mathml4/), [semantics-mini](
 
 <input id='freetex' name='formula' type='text'><input type="submit" value="convert...">
 <button type="button" class='collapsible'>edit preamble</button>
+<span id="a11y-mode-label"><label for="a11y-mode">A11Y annotations</label><input type="checkbox" id="a11y-mode" name="a11y-mode" value="on" checked></span>
 </form>
 <div class="latexml-log"></div>

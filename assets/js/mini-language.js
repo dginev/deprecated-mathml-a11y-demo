@@ -91,6 +91,7 @@ function postfix(op, arg) {
 function prefix(op, arg) {
   let op_word = prefix_op_word(op);
   if (op_word.includes(' of ')) {
+    // once we start using -of- clauses, keep that style
     return op_word + " of " + arg; }
   else {
     return op_word + " " +arg; } }
