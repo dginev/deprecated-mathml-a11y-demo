@@ -97,9 +97,12 @@ function ttsSpeak(btn) {
 let speak_btn = "<span class='btn-speak' onClick='ttsSpeak(this); return false'>🔊</span>";
 let sre_pre = "<span class='bold'><a href='https://github.com/zorkow/speech-rule-engine'>SRE</a>:&nbsp;</span>";
 
-var latexml_convert_url = "https://latexml.mathweb.org/convert";
 var latexml_a11y_url = "https://latexml.mathweb.org/a11y/convert";
-var preloads_base = ["LaTeX.pool", "article.cls", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty", 'array.sty']
+var latexml_preloads_base = ["LaTeX.pool", "article.cls", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty", 'array.sty']
+var latexml_settings_base = { // minimal latexml preloads for somewhat usual latex math
+    "timeout": "10", "format": "html5", "whatsin": "fragment",
+    "whatsout": "math", "pmml": "",
+    "postamble": "literal:\n\\end{document}" }
 const leading_newline = /^\n+/;
 // convert a chosen 'tex' input to MathML+annotations via latexml
 function handle_input(tex) {
@@ -107,23 +110,24 @@ function handle_input(tex) {
   let log_container = $("div.latexml-log");
   log_container.hide();
   log_container.html('');
-  let preloads_current = preloads_base.slice(0);
-  let post_url;
-  if ($('#a11y-mode').is(":checked")) {
-    post_url = latexml_a11y_url;
-    preloads_current.push("a11ymark.sty");
-  } else {
-    post_url = latexml_convert_url;
-    preloads_current = preloads_base;
-  }
-  $.post(post_url, { // minimal latexml preloads for somewhat usual latex math
-    "tex": '\\('+tex+'\\)',
-    "timeout": "10", "format": "html5", "whatsin": "fragment", "whatsout": "math", "pmml": "",
-    "cache_key": "a11y_showcase",
-    "preload": preloads_current,
-    "preamble": "literal:" + $("#preamble").val()+"\n\\begin{document}\n",
-    "postamble": "literal:\n\\end{document}",
-  }, function (data) {
+  let preloads_current = latexml_preloads_base.slice(0);
+  let latexml_settings = { ...latexml_settings_base };
+  let a11y_mode = $('#a11y-mode').val();
+  switch (a11y_mode) {
+    case 'a11y': {
+      preloads_current.push("[mark]a11ymark.sty");
+      break; }
+    case 'cmml': {
+      latexml_settings["cmml"] = ""; }
+    default: {
+      preloads_current.push("[nomark]a11ymark.sty");
+    } }
+  latexml_settings["cache_key"] = "a11y_showcase_"+a11y_mode;
+  latexml_settings["tex"] = '\\(' + tex + '\\)';
+  latexml_settings["preload"] = preloads_current;
+  latexml_settings["preamble"] = "literal:" + $("#preamble").val() + "\n\\begin{document}\n";
+
+  $.post(latexml_a11y_url, latexml_settings, function (data) {
     if (data.status_code == 3) {
       log_container.html("<span>"+data.log.trim().replaceAll("\n","<br>")+"</span>");
       log_container.show();
@@ -160,6 +164,10 @@ function handle_input(tex) {
     let code_tr = $("tbody tr:last").prev();
     block = $(code_tr).find("pre code");
     hljs.highlightBlock(block[0]);
+    if (a11y_mode == 'cmml') {
+      // make xml:id and xref attributes legible by fading them out
+      $('span.hljs-attr:contains("id")').add('span.hljs-attr:contains("xref")')
+        .next('span.hljs-string').addClass('tooltip'); }
 
     if (typeof MathJax != "undefined") { // retypeset doc if we have MathJax loaded
       MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
