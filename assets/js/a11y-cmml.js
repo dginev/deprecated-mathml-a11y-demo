@@ -29,7 +29,8 @@ function retouch_hljs_for_cmml() {
     cross_highlights.delete('hljs-attr');
     cross_highlights.delete('hljs-string');
     for (const classitem of cross_highlights) {
-      $('span.' + classitem).show();
+      if (classitem) {
+        $('span.' + classitem).show(); }
     }
   }, function() {
     let cross_highlights = new Set();
@@ -44,7 +45,8 @@ function retouch_hljs_for_cmml() {
     cross_highlights.delete('hljs-attr');
     cross_highlights.delete('hljs-string');
     for (const classitem of cross_highlights) {
-      $('.'+classitem).hide();
+      if (classitem) {
+        $('.'+classitem).hide(); }
     }
   });
 }

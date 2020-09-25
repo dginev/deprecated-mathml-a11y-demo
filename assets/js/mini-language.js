@@ -111,7 +111,7 @@ function narrate_symbol(textsymbol) {
       var aural = sre.AuralRendering.getInstance();
       var descrs = [
         sre.AuditoryDescription.create({ text: textsymbol }, { adjust: true, translate: true })];
-      var result = aural.finalize(aural.markup(descrs));
+      var result = aural.finalize(aural.markup(descrs)).replace(/^italic /,'');
       return result;
     }
   }
