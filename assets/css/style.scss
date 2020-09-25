@@ -69,8 +69,13 @@ div.wrapper-modified {
     margin-left: 25px;
     font-size: small;
   }
-  .hljs-string.tooltip {
-    color: #cccbc8;
+  .custom-id-faded {
+    display: none;
+    color: #e8e3ca; // #cccbc8;
+  }
+  .custom-xref-faded {
+    display: none;
+    color: #aec4e6;
   }
 
   div.latexml-log {

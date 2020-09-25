@@ -18,6 +18,10 @@
 
 {%include_relative narrate-style-phrase.js %}
 
+{%include_relative narrate-cmml.js %}
+
 {% include_relative mini-narrate.js %}
+
+{% include_relative a11y-cmml.js %}
 
 {% include_relative a11y.js %}

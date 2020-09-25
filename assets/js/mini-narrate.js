@@ -128,6 +128,8 @@ function split_balanced_chunks(text) {
 function narrate(math, style) {
   if (!math) { return '';}
   if (typeof math === 'string') { return math;} // literal narrates as self (for now)
+  if (math[0].nodeName === 'semantics') {
+    return narrate_cmml(math, style); }
   let semantic = $(math).data('semantic');
   let narration = narrate_semantic(math, style, semantic);
   // special global tricks for mozilla/TTS pronunciations
