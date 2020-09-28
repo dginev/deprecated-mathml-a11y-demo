@@ -1,52 +1,56 @@
+function cross_highlights(tag_node, mode) {
+  let xref_set = new Set();
+  let xref = tag_node.find('> span.custom-xref');
+  let id = tag_node.find('> span.custom-id');
+  id.add(xref).each(function (index, span) {
+    for (const classitem of $(span).attr('class').split(' ')) {
+      xref_set.add(classitem);
+    }
+  });
+
+  xref_set.delete('custom-xref');
+  xref_set.delete('custom-id');
+  xref_set.delete('faded');
+  xref_set.delete('hljs-tag');
+  xref_set.delete('hljs-attr');
+  xref_set.delete('hljs-string');
+  let pre_tag = tag_node.closest('pre');
+  for (const classitem of xref_set) {
+    if (classitem) {
+      if (mode == 'show') {
+        pre_tag.find('span.' + classitem).show(); }
+      else {
+        pre_tag.find('span.' + classitem).hide();
+      }
+    }
+  }
+}
+
 function retouch_hljs_for_cmml() {
 // make xml:id and xref attributes legible by fading them out
   $('span.hljs-attr:contains("id")').add('span.hljs-attr:contains("xref")').each(function(index) {
-    let td = $(this).closest('td');
+    let this_attr = $(this);
+    let td = this_attr.closest('td');
     td.css('min-width', td.width());
-    let faded_class = 'custom-' + $(this).text() + '-faded';
-    let value_node = $(this).next('span.hljs-string');
+    let custom_class = 'custom-' + this_attr.text();
+    let faded_class = custom_class + ' faded';
+    let value_node = this_attr.next('span.hljs-string');
     let value_class =value_node.text().replaceAll(/[\."]/g,'');
-    let full_class = faded_class + ' ' + value_class;
+    let full_class_faded = faded_class + ' ' + value_class;
+    let full_class = custom_class + ' ' + value_class;
     value_node.addClass(full_class);
-    $(this).addClass(full_class);
-    let eq_node = $(this)[0].nextSibling;
-    $(eq_node).replaceWith('<span class="'+full_class+'">'+eq_node.nodeValue+'</span>');
-    let ws_node = $(this)[0].previousSibling;
+    this_attr.addClass(full_class_faded);
+    let eq_node = this_attr[0].nextSibling;
+    $(eq_node).replaceWith('<span class="'+full_class_faded+'">'+eq_node.nodeValue+'</span>');
+    let ws_node = this_attr[0].previousSibling;
     if (ws_node && ws_node.nodeValue == ' ') {
-      $(ws_node).replaceWith('<span class="' + full_class + '">' + ws_node.nodeValue + '</span>');
+      $(ws_node).replaceWith('<span class="' + full_class_faded + '">' + ws_node.nodeValue + '</span>');
     }
   });
-  $('span.hljs-tag').hover(function() {
-    let cross_highlights = new Set();
-    let xref = $(this).find('> span.custom-xref-faded');
-    let id = $(this).find('> span.custom-id-faded');
-    id.add(xref).each(function(){
-      for (const classitem of $(this).attr('class').split(' ')) {
-        cross_highlights.add(classitem);
-      } } );
-    cross_highlights.delete('custom-xref-faded');
-    cross_highlights.delete('custom-id-faded');
-    cross_highlights.delete('hljs-attr');
-    cross_highlights.delete('hljs-string');
-    for (const classitem of cross_highlights) {
-      if (classitem) {
-        $('span.' + classitem).show(); }
-    }
-  }, function() {
-    let cross_highlights = new Set();
-    let xref = $(this).find('> span.custom-xref-faded');
-    let id = $(this).find('> span.custom-id-faded');
-    id.add(xref).each(function(){
-      for (const classitem of $(this).attr('class').split(' ')) {
-        cross_highlights.add(classitem);
-      } } );
-    cross_highlights.delete('custom-xref-faded');
-    cross_highlights.delete('custom-id-faded');
-    cross_highlights.delete('hljs-attr');
-    cross_highlights.delete('hljs-string');
-    for (const classitem of cross_highlights) {
-      if (classitem) {
-        $('.'+classitem).hide(); }
-    }
-  });
+
+  $('span.hljs-tag').hover(
+    function() {
+      cross_highlights($(this), 'show'); },
+    function() {
+      cross_highlights($(this), 'hide'); });
 }

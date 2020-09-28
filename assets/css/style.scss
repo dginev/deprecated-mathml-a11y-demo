@@ -69,11 +69,20 @@ div.wrapper-modified {
     margin-left: 25px;
     font-size: small;
   }
-  .custom-id-faded {
+
+  .custom-id {
     display: none;
-    color: #e8e3ca; // #cccbc8;
+    color: #f5b973;
   }
-  .custom-xref-faded {
+  .custom-id.faded {
+    display: none;
+    color: #e8e3ca;
+  }
+  .custom-xref {
+    display: none;
+    color:#2f7aae;
+  }
+  .custom-xref.faded {
     display: none;
     color: #aec4e6;
   }
