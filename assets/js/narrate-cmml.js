@@ -18,8 +18,13 @@ function narrate_cmml_element(el, style) {
     case 'cn':
     case 'csymbol':
       return narrate_symbol(el.text());
-    case 'abs':
-      'absolute-value'
+    case 'abs': return 'absolute-value'
+    case 'eq': return 'equal'
+    case 'neq': return 'not-equal'
+    case 'lt': return 'less-than'
+    case 'gt': return 'greater-than'
+    case 'leq': return 'less-than-or-equal'
+    case 'geq': return 'greater-than-or-equal'
     default:
       return el_name;
   }

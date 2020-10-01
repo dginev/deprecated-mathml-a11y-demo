@@ -35,7 +35,8 @@ function retouch_hljs_for_cmml() {
     let custom_class = 'custom-' + this_attr.text();
     let faded_class = custom_class + ' faded';
     let value_node = this_attr.next('span.hljs-string');
-    let value_class =value_node.text().replaceAll(/[\."]/g,'');
+    let droppable_chars = /[\."]/g;
+    let value_class = value_node.text().toString().replace(droppable_chars,'');
     let full_class_faded = faded_class + ' ' + value_class;
     let full_class = custom_class + ' ' + value_class;
     value_node.addClass(full_class);
