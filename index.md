@@ -5,7 +5,7 @@ layout: default
 # A Showcase for Formula Narrations
 
 
-Rendered | MathML [4?](https://www.w3.org/community/mathml4/), [semantics-mini](https://mathml-refresh.github.io/mathml/docs/semantics-mini) (via LaTeXML) | Narrations
+Rendered | MathML [4?](https://www.w3.org/community/mathml4/), (via LaTeXML) | Narrations
 -------- | -------- | ------
          |          |
 

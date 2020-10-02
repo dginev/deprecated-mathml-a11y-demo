@@ -10,10 +10,10 @@ function obtain_arg(target_arg, context, path) {
   if (path_sep.length > 0) {
     path_sep += '/'; }
   $.each(context.children, function(child_idx, child) {
-    if (child.getAttribute('data-arg') == target_arg) {
+    if (child.getAttribute('arg') == target_arg) {
       child.setAttribute('data-arg-path', path_sep + (1+child_idx));
       result = child; return false; }
-    else if (!child.getAttribute('data-semantic')) {
+    else if (!child.getAttribute('alt')) {
       let child_result = obtain_arg(target_arg, child, path_sep+(1+child_idx));
       if (child_result) {
         result = child_result; return false; } }
@@ -130,7 +130,7 @@ function narrate(math, style) {
   if (typeof math === 'string') { return math;} // literal narrates as self (for now)
   if (math[0].nodeName === 'semantics') {
     return narrate_cmml(math, style); }
-  let semantic = $(math).data('semantic');
+  let semantic = $(math).attr('alt');
   let narration = narrate_semantic(math, style, semantic);
   // special global tricks for mozilla/TTS pronunciations
   // const spaced_letter = /(?:^| )([a-z])\W/gi;
