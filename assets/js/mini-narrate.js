@@ -1,3 +1,5 @@
+var a11y_arg_mark = '$';
+
 // depends on "mini-language.js"
 //
 // -- Walking the tree
@@ -155,7 +157,7 @@ function narrate_semantic(math, style, semantic) {
         if (arg.indexOf('(') > -1 || arg.indexOf(')') > -1) {
           // independent fragment, call a sandboxed narrate, and include the string directly
           args.push(narrate_semantic(math, style, arg)); }
-        else if (!arg.startsWith('#')) { // literal
+        else if (!arg.startsWith(a11y_arg_mark)) { // literal
           args.push(arg); }
         else {
           arg_val = arg.substr(1);
