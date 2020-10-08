@@ -72,15 +72,26 @@ div.wrapper-modified {
 
   .custom-id {
     display: none;
+  }
+  .custom-id.in-content {
     color: #f5b973;
   }
+  .custom-id.in-pres {
+    color:#2f7aae;
+  }
+
   .custom-id.faded {
     display: none;
     color: #e8e3ca;
   }
   .custom-xref {
     display: none;
+  }
+  .custom-xref.in-content {
     color:#2f7aae;
+  }
+  .custom-xref.in-pres {
+    color: #f5b973;
   }
   .custom-xref.faded {
     display: none;

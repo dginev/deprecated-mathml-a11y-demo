@@ -11,6 +11,8 @@ function cross_highlights(tag_node, mode) {
   xref_set.delete('custom-xref');
   xref_set.delete('custom-id');
   xref_set.delete('faded');
+  xref_set.delete('in-pres');
+  xref_set.delete('in-content');
   xref_set.delete('hljs-tag');
   xref_set.delete('hljs-attr');
   xref_set.delete('hljs-string');
@@ -32,9 +34,14 @@ function retouch_hljs_for_cmml() {
     let this_attr = $(this);
     let td = this_attr.closest('td');
     td.css('min-width', td.width());
-    let custom_class = 'custom-' + this_attr.text();
-    let faded_class = custom_class + ' faded';
     let value_node = this_attr.next('span.hljs-string');
+    let custom_class = 'custom-' + this_attr.text();
+    let name_node = this_attr.prevAll('span.hljs-name:first');
+    if (name_node.text().startsWith('m')) {
+      custom_class += ' in-pres'; } else {
+      custom_class += ' in-content'; }
+
+    let faded_class = custom_class;// + ' faded';
     let droppable_chars = /[\."]/g;
     let value_class = value_node.text().toString().replace(droppable_chars,'');
     let full_class_faded = faded_class + ' ' + value_class;
