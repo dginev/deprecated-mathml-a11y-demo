@@ -6,14 +6,6 @@ function narrate_cmml(math, style) {
 function narrate_cmml_element(el, style) {
   let el_name = el.prop("tagName");
   switch (el_name) {
-    case 'apply': {
-      let children = el.children();
-      let op = narrate_cmml_element($(children.first()), style);
-      children = children.slice(1);
-      let child_narrations = [];
-      for (const child of children) {
-        child_narrations.push(narrate_cmml_element($(child), style));  }
-      return narrate_by_table(op,child_narrations, style); }
     case 'ci':
     case 'cn':
     case 'csymbol':
@@ -25,7 +17,22 @@ function narrate_cmml_element(el, style) {
     case 'gt': return 'greater-than'
     case 'leq': return 'less-than-or-equal'
     case 'geq': return 'greater-than-or-equal'
-    default:
-      return el_name;
+    default: {
+      let children = el.children();
+      let op;
+      if (el_name == "apply") {
+        op = narrate_cmml_element($(children.first()), style);
+        children = children.slice(1); }
+      else {
+        op = el_name; }
+      let child_narrations = [];
+      for (const child of children) {
+        child_narrations.push(narrate_cmml_element($(child), style));
+      }
+      if (child_narrations.length > 0) {
+        return narrate_by_table(op, child_narrations, style); }
+      else {
+        return op; }
+    }
   }
 }
