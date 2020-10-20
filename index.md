@@ -24,7 +24,7 @@ Rendered | MathML [4?](https://www.w3.org/community/mathml4/), (via LaTeXML) | N
 \pragma*{pre:\@APPLYFUNCTION}{\left(?,?;?|?\right)}
 </textarea>
 
-<input id='freetex' name='formula' type='text'><input type="submit" value="convert...">
+<input id='freetex' name='formula' placeholder="type any TeX math" type='text'><input type="submit" value="convert...">
 <button type="button" class='collapsible'>edit preamble</button>
 <span id="a11y-mode-label"><label for="a11y-mode">math format</label>
   <select id="a11y-mode" name="a11y-mode">
@@ -34,4 +34,5 @@ Rendered | MathML [4?](https://www.w3.org/community/mathml4/), (via LaTeXML) | N
   </select>
 </span>
 </form>
+
 <div class="latexml-log"></div>

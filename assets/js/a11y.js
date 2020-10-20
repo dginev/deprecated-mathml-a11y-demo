@@ -1,61 +1,3 @@
-// Predefined TeX examples for easy exploring:
-let a11y_other_examples = {
-  'abs, ceil, floor': '|x|+\\lceil{y}\\rceil\\lfloor{z}\\rfloor',
-  'binomial (nested)': '\\binom{\\binom{a}{b}}{\\binom{x}{y}}',
-  'factorials': 'x!y!',
-  'integral notations': '\\int \\frac{dr}r = \\int\\frac{1}{r} dr',
-  'integral, triple': '\\iiint_{T} f(x, y, z) dx dy dz',
-  'interval membership': 'x \\in (a, \\infty)',
-  'Leibniz notation': '\\frac{dy}{dx} = \\frac{d}{dx}[y]',
-  'multi-relation': 'x<y<z',
-  'n-ary addition in equation': '1+2+3=6',
-  'n-ary addition': 'a+b+c+d+e',
-  'quantum physics': '|\\psi\\rangle\\langle\\phi|',
-  'set of elements': '\\{1,2,\\ldots\\}',
-  'simple addition': '1+1=2',
-  'square root': '\\sqrt{x}',
-};
-let a11y_mini_spec_examples = {
-  'awkward nesting (1)': '\\PostArgsCrosswise{x}{derivative-implicit-variable}{^}{\\derivemark{1}}{index}{_}{i}',
-  'awkward nesting (2)': '\\PrePostArgCrosswise{x}{median}{\\overline}{index}{_}{i}',
-  'base-operator': 'C^n_m',
-  'continued fraction': 'a_{0}+\\frac{1}{a_{1}+\\frac{1}{a_{2}+\\cdots}}',
-  'derivative, n-th': "\\fnderive{f}{n}",
-  'derivative, second': "\\fnderive{f}{2}",
-  'differentials': '\\frac{d^2f}{dx^2}',
-  'factorial': 'n!',
-  'fenced-stacked, binomial': '\\binom{n}{m}',
-  'fenced-stacked, Eulerian numbers': '\\left< n \\atop k \\right>',
-  'fenced-stacked, multinomial': '\\binom{n}{m_1,m_2,m_3}',
-  'fenced-sub, Pochhammer': '\\left(a \\right)_n',
-  'fenced-table, 3j symbol': '\\left(\\begin{array}{ccc}j_1& j_2 &j_3 \\\\ m_1 &m_2 &m_3\\end{array}\\right)',
-  'fenced, abs': '|x|',
-  'fenced, Clebsch-Gordan': '(j_1 m_1 j_2 m_2 | j_1 j_2 j_3 m_3)|',
-  'fenced, determinant': '\\determinant{X}',
-  'fenced, inner product': '\\left<\\mathbf{a},\\mathbf{b}\\right>',
-  'fenced, Legendre symbol': '\\left(n|p\\right)',
-  'fenced, norm': '\\norm{x}',
-  'fenced, open-interval (2)': ']a, b[',
-  'fenced, open-interval': '(a,b)',
-  'fenced, sequence': '\\lbrace a_n\\rbrace',
-  'function (A)': 'A \\left( a,b;z|q \\right)',
-  'function BesselJ': 'J_\\nu(z)',
-  'indexing': 'a_i',
-  'inner product': '\\mathbf{a}\\cdot\\mathbf{b}',
-  'integrals': '\\int\\frac{dr}{r}',
-  'inverse': '\\fninverse{\\sin}(x)',
-  'Laplacian': '\\laplacian{f}',
-  'n-ary? plus-minus chain': 'a+b-c+d',
-  'power': '\\power{x}{n}',
-  'repeated application': '\\fnpower{f}{n}',
-  'sup-adjoint': '\\adjoint{A}',
-  'sup-transpose': '\\transpose{A}',
-  'unary minus': '-a',
-}
-let a11y_semantic_tex_examples = {
-  'integral': "\\integral{f(x)}{x}",
-};
-
 var tts_url = "https://tts.deyan.us";
 $.ajax({
   type: "HEAD",
@@ -96,6 +38,7 @@ let speak_btn = "<span class='btn-speak' onClick='ttsSpeak(this); return false'>
 let sre_pre = "<span class='bold'><a href='https://github.com/zorkow/speech-rule-engine'>SRE</a>:&nbsp;</span>";
 
 var latexml_a11y_url = "https://latexml.mathweb.org/a11y/convert";
+//var latexml_a11y_url = "http://localhost:3000/convert";
 var latexml_preloads_base = ["LaTeX.pool", "article.cls", "amsmath.sty", "amsthm.sty", "amstext.sty", "amssymb.sty", 'array.sty']
 var latexml_settings_base = { // minimal latexml preloads for somewhat usual latex math
     "timeout": "10", "format": "html5", "whatsin": "fragment",
@@ -126,6 +69,7 @@ function handle_input(tex) {
   latexml_settings["preamble"] = "literal:" + $("#preamble").val() + "\n\\begin{document}\n";
 
   $.post(latexml_a11y_url, latexml_settings, function (data) {
+    $('thead').css('visibility','visible');
     if (data.status_code == 3) {
       log_container.html("<span>"+data.log.trim().replaceAll("\n","<br>")+"</span>");
       log_container.show();
@@ -196,33 +140,58 @@ function dirty_escape_html(unsafe) {
 
 // set up the UI bits, dashboard, form events...
 $(document).ready(function () {
-  let options = '<option disabled selected value> -- select TeX formula -- </option>';
-  options += '<option disabled value> -- semantic-mini spec examples -- </option>';
-  $.each(a11y_mini_spec_examples, function (name, tex) {
-    let escaped_tex = dirty_escape_html(tex);
-    options += '<option value="'+escaped_tex+'">'+name+'</option>'; });
-  // now concat the semantic examples
-  options += '<option disabled value> -- semantic macro examples -- </option>';
-  $.each(a11y_semantic_tex_examples, function (name, tex) {
-    let escaped_tex = dirty_escape_html(tex);
-    options += '<option value="' + escaped_tex + '">' + name + '</option>';
+  example_gallery.sort(function (a, b) {
+    return a.value.toLowerCase() > b.value.toLowerCase();
   });
-  // curiosities near the end
-  options += '<option disabled value> -- other examples -- </option>';
-  $.each(a11y_other_examples, function (name, tex) {
-    let escaped_tex = dirty_escape_html(tex);
-    options += '<option value="' + escaped_tex + '">' + name + '</option>';
+  $(example_gallery).each(function (index, example) {
+    example.data.index = index;
   });
-
+  let options = '<option disabled selected value> select example </option>';
+  $.each(example_gallery, function (index,example) {
+    options += '<option value=' + example.data.index + '>' + example.value + '</option>';
+  });
+  let autocomplete_element = '<input type="text" name="auto-example" placeholder="Search examples" id="autocomplete"/>';
   let select_element = '<select id="example_select" name="example">'+options+'</select>';
-  $("tbody tr:last").replaceWith('<tr class="choice"><td>Examples:</td><td>' +select_element+'</td><td><span id="raw-tex"></span>'+
-  '<input type="submit" id="reset_table" value="clear all"></td></tr>');
+  $("tbody tr:last").replaceWith('<tr class="choice"><td>Examples</td><td>' + autocomplete_element + '<span>&nbsp;</span>' + select_element +
+    '<input type="submit" id="reset_table" value="clear all"></td><td><span id="raw-tex"></span>'+'</td></tr>');
 
   $("#example_select").change(function() {
     // convert and grab MathML
-    let tex = $(this).val();
+    let this_val = parseInt($(this).val());
+    let tex = example_gallery[this_val].data.tex;
+    let escaped_tex = dirty_escape_html(tex);
     $("span#raw-tex").html("<span class='tex-source'><span class='bold'>tex: </span>" +dirty_escape_html(tex)+'</span>');
     handle_input(tex);
+  });
+
+  // augment the example_gallery with additional entries for autocompleting on the latex syntax
+  expanded_gallery = [];
+  $(example_gallery).each(function(index,example) {
+    expanded_gallery.push(example);
+    expanded_gallery.push({value: example.data.tex, data: example.data});
+  });
+
+  $('#autocomplete').autocomplete({
+    lookup: expanded_gallery,
+    lookupLimit: 14,
+    lookupFilter: function (suggestion, query, queryLowerCase) {
+      if (query.indexOf('\\') == -1) {
+        if (suggestion.value.indexOf('\\') == -1) {
+          let re = new RegExp('\\b' + $.Autocomplete.utils.escapeRegExChars(queryLowerCase), 'gi');
+          return (re.test(suggestion.value)); }
+        else { return false; } }
+      else {
+        if (suggestion.value.indexOf('\\') > -1) {
+          let re = new RegExp($.Autocomplete.utils.escapeRegExChars(query), 'gi');
+          return (re.test(suggestion.value)); }
+        else { return false; } } },
+    preserveInput: true,
+    showNoSuggestionNotice: true,
+    onSelect: function (suggestion) {
+      let option = $('#example_select').find("option[value="+suggestion.data.index+"]").first();
+      if (!option.prop('selected')) { // avoid double-toggle
+        option.prop('selected', 'selected').change(); }
+    }
   });
 
   $("form").submit(function (e) {
@@ -231,6 +200,7 @@ $(document).ready(function () {
     handle_input($("input#freetex").val());
     return false;
   });
+
   // cleanup UI
   $("input#reset_table").click(function (e) {
     e.preventDefault();

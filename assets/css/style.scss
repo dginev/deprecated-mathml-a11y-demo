@@ -29,6 +29,9 @@ div.wrapper-modified {
     td > pre {
       margin: 0;
     }
+    thead {
+      visibility: hidden;
+    }
   }
   td.xlarge {
     font-size: x-large;
@@ -107,3 +110,9 @@ div.wrapper-modified {
     }
   }
 }
+
+div.autocomplete-suggestions { background-color: #f2f7ff; opacity:1; }
+div.autocomplete-suggestion { opacity:1; }
+div.autocomplete-suggestion.autocomplete-selected { background-color: #87cafa; }
+div.autocomplete-group { background-color: #f2f7ff; }
+div.autocomplete-no-suggestion { background-color: #ccd0d6; }

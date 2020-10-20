@@ -2,6 +2,8 @@
 ---
 {%include_relative jquery-3.5.1.min.js %}
 
+{%include_relative jquery.autocomplete.min.js %}
+
 {%include_relative highlight.min.js %}
 
 {%include_relative xml.min.js %}
@@ -9,6 +11,8 @@
 {%include_relative LaTeXML-maybeMathjax.js %}
 
 {%include_relative sre_browser.js %}
+
+{%include_relative example_gallery.js %}
 
 {%include_relative collapsible.js %}
 
