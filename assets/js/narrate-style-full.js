@@ -17,6 +17,11 @@ function default_narrate_switch(op, arg_narrations, fixity) {
       return arg_narrations[0]+" at index "+arg_narrations[1];
     case 'equals':
       return infix('is equal to', arg_narrations);
+    case 'defined-as':
+      return infix('is defined as', arg_narrations);
+    case 'less-than': // standard enough to always do as infix
+    case 'greater-than':
+      return infix(op, arg_narrations);
     case 'functional-power':
       return arg_narrations[0]+' to the '+arg_narrations[1];
     case 'multirelation':
@@ -38,6 +43,23 @@ function default_narrate_switch(op, arg_narrations, fixity) {
       return the_np(op, arg_narrations[0] + ' d ' + arg_narrations[1]);
     case 'derivative-implicit-variable':
       return infix(" derivative of ", [numeral(arg_narrations[1]), arg_narrations[0]]);
+    case 'formulae':
+      let enumerated_formulae = '';
+      $.each(arg_narrations, function (index, value) {
+        let numword = numeral(index+1);
+        enumerated_formulae += 'start-'+numword+'-formula . '+value+' . end-'+numword+"-formula . ";
+      });
+      return enumerated_formulae;
+    case 'cases':
+      // for now assume they always mean piecewise, and that the arguments are unstructured in groups of 2 columns per row
+      let pieces = [];
+      for (var i = 0; i < arg_narrations.length - 1; i+=2) {
+        let case_id = numeral(1 + i / 2);
+        pieces.push(
+          "start-"+case_id+"-case . "+arg_narrations[i] + ' ' + arg_narrations[i + 1] +
+          " . end-" + case_id + "-case . "
+        ); }
+      return "piece-wise function . " + pieces.join(" ");
     default:
       switch (fixity) {
         case 'prefix': return np_of(op, arg_narrations[0]);

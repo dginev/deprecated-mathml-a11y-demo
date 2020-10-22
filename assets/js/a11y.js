@@ -11,7 +11,8 @@ $.ajax({
 });
 // call mozilla/TTS with the content of the preceding span.speech
 function ttsSpeak(btn) {
-  let speech = $(btn).nextAll("span.speech:first").text() + " .";
+  let speech = $(btn).nextAll("span.speech:first").text().trim();
+  if (!speech.endsWith('.')) { speech += '.'; }
   $("body").css("cursor", "progress");
   fetch(tts_url+'/api/tts?text=' + encodeURIComponent(speech), {})
     .then(function (res) {
@@ -64,7 +65,10 @@ function handle_input(tex) {
       preloads_current.push("[nomark]a11ymark.sty");
     } }
   latexml_settings["cache_key"] = "a11y_showcase_"+a11y_mode;
-  latexml_settings["tex"] = '\\(' + tex + '\\)';
+  if (tex.startsWith("\\begin")) {
+    latexml_settings["tex"] = tex; }
+  else {
+    latexml_settings["tex"] = '\\(' + tex + '\\)'; }
   latexml_settings["preload"] = preloads_current;
   latexml_settings["preamble"] = "literal:" + $("#preamble").val() + "\n\\begin{document}\n";
 
@@ -90,17 +94,17 @@ function handle_input(tex) {
         "<span class='bold'>semantic brief:&nbsp;</span><br>" + speak_btn +
         "<span class='speech'>" + narration_phrase + "</span>" + "<br><br>"+
         "<span class='bold'>semantic full:&nbsp;</span><br>" + speak_btn +
-        "<span class='speech'>" + narration_sentence +"</span>" + "<br><br>"; }
+        "<span class='speech'>" + narration_sentence +"</span>"; }
     narration_html += "<br><br><span class='bold'>annotation:&nbsp;</span>" + annotation_tree +
-      "<br>" + $("span#raw-tex").html() +'<span class="remove-tr">🗑</span>';
+      "<br><br>" + $("span#raw-tex").html() +'<span class="remove-tr">🗑</span>';
     // we won't need to render the data-arg-path attributes, and any other runtime attributes we end up with.
     mathml.find("[data-arg-path]").each(function (idx,el) {
       el.removeAttribute('data-arg-path'); });
     let pretty = $('<code/>', { 'class': "xml" });
     pretty.text(mathml.html().replace(leading_newline, ''));
     $("tbody tr:last").before(
-      '<tr><td class="xlarge">' + mathml[0].outerHTML +
-      "</td><td>" + '<pre>' + pretty[0].outerHTML + "</pre></td><td class='narration'>" +
+      '<tr><td class="w30 xlarge">' + mathml[0].outerHTML +
+      "</td><td class='w35'>" + '<pre>' + pretty[0].outerHTML + "</pre></td><td class='w35 narration'>" +
       narration_html + '</td></tr>');
 
     let code_tr = $("tbody tr:last").prev();
@@ -150,9 +154,9 @@ $(document).ready(function () {
   $.each(example_gallery, function (index,example) {
     options += '<option value=' + example.data.index + '>' + example.value + '</option>';
   });
-  let autocomplete_element = '<input type="text" name="auto-example" placeholder="Search examples" id="autocomplete"/>';
+  let autocomplete_element = '<input type="text" name="auto-example" placeholder="Search examples" id="autocomplete-example"/>';
   let select_element = '<select id="example_select" name="example">'+options+'</select>';
-  $("tbody tr:last").replaceWith('<tr class="choice"><td>Examples</td><td>' + autocomplete_element + '<span>&nbsp;</span>' + select_element +
+  $("tbody tr:last").replaceWith('<tr class="choice"><td class="w30">Examples</td><td class="w35">' + autocomplete_element + '<span>&nbsp;</span>' + select_element +
     '<input type="submit" id="reset_table" value="clear all"></td><td><span id="raw-tex"></span>'+'</td></tr>');
 
   $("#example_select").change(function() {
@@ -167,11 +171,11 @@ $(document).ready(function () {
   // augment the example_gallery with additional entries for autocompleting on the latex syntax
   expanded_gallery = [];
   $(example_gallery).each(function(index,example) {
-    expanded_gallery.push(example);
+    expanded_gallery.push({value: example.value+'  ('+example.data.category+')', data: example.data });
     expanded_gallery.push({value: example.data.tex, data: example.data});
   });
 
-  $('#autocomplete').autocomplete({
+  $('#autocomplete-example').autocomplete({
     lookup: expanded_gallery,
     lookupLimit: 14,
     lookupFilter: function (suggestion, query, queryLowerCase) {
@@ -185,7 +189,7 @@ $(document).ready(function () {
           let re = new RegExp($.Autocomplete.utils.escapeRegExChars(query), 'gi');
           return (re.test(suggestion.value)); }
         else { return false; } } },
-    preserveInput: true,
+    preserveInput: false,
     showNoSuggestionNotice: true,
     onSelect: function (suggestion) {
       let option = $('#example_select').find("option[value="+suggestion.data.index+"]").first();

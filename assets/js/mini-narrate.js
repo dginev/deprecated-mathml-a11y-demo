@@ -25,7 +25,7 @@ function obtain_arg(target_arg, context, path) {
 // describe fixity based on descendent paths to each argument,
 // as ordered in the semantic tree
 function compute_fixity(args, top_node) {
-  let cached = top_node.getAttribute("data-fixity");
+  let cached = (typeof args[0] == "object") && $(args[0]).data("fixity");
   if (cached) {
     return cached; }
   let presentation_trace = [];
@@ -36,7 +36,17 @@ function compute_fixity(args, top_node) {
     else {
       presentation_trace.push($(arg).data('arg-path')); }
   });
+  // remove common path prefixes
+  if (presentation_trace.length > 0 && presentation_trace[0].toString().indexOf('/') != -1) {
+    while (presentation_trace[0].length>0 && (new Set(presentation_trace.map(x => x.toString()[0]||''))).size == 1) {
+      presentation_trace = presentation_trace.map(x => x && x.substring(1));
+    }
+  }
+
   let paths_str = presentation_trace.join(",");
+  // console.log("args: ",args);
+  // console.log("top node: ", top_node);
+  // console.log("presentation string: ",paths_str);
   switch (paths_str) {
     case "":
     case "literal":
@@ -61,6 +71,15 @@ function compute_fixity(args, top_node) {
     case "literal,2,4": // e.g. intervals (a,b)
       return "fenced";
     default:
+      if (presentation_trace.length == 3) {
+        // looser checks
+        let op_int = parseInt(presentation_trace[0].toString().split("/").join(""));
+        let arg1_int = parseInt(presentation_trace[1].toString().split("/").join(""));
+        let arg2_int = parseInt(presentation_trace[2].toString().split("/").join(""));
+        if (op_int > arg1_int && arg2_int > op_int) {
+          return "infix";
+        }
+      }
       if (paths_str.startsWith("2,1,3,5")) {
         return "nary-infix"; }
       if (paths_str.startsWith("literal,1,3,5")) {
@@ -142,20 +161,26 @@ function narrate(math, style) {
 
 function narrate_semantic(math, style, semantic) {
   let context = math[0];
-  semantic = semantic && semantic.toString();
+  semantic = semantic && semantic.toString().trim();
   if (semantic && semantic.length>0) { // balanced parens need a context-free grammar here, but for the demo we regex and whistle.
     let args = [];
+    let args_fixity = [];
     let arg_chunks = get_balanced_chunks(semantic);
     for (const arg_body of arg_chunks) {
       let pieces = [];
       // if we have multiple arg bodies, this is a
       // higher-order / curried operator and we need to nest further
-      pieces = pieces.concat(split_balanced_chunks(arg_body));
+      pieces = pieces.concat(split_balanced_chunks(arg_body).map(x => x.trim()));
       for (const arg of pieces) {
         if (!arg) { continue; }
         // if any of the args contains () they need to be expanded recursively, do so
-        if (arg.indexOf('(') > -1 || arg.indexOf(')') > -1) {
+        let open_paren = arg.indexOf('(');
+        if (open_paren > -1) {
           // independent fragment, call a sandboxed narrate, and include the string directly
+          let op_literal = arg.substring(0, open_paren);
+          let arg_node = obtain_arg(op_literal.substr(1), context);
+          if (arg_node) {
+            args_fixity.push(arg_node); }
           args.push(narrate_semantic(math, style, arg)); }
         else if (!arg.startsWith(a11y_arg_mark)) { // literal
           args.push(arg); }
@@ -163,20 +188,23 @@ function narrate_semantic(math, style, semantic) {
           arg_val = arg.substr(1);
           let arg_node = obtain_arg(arg_val, context);
           if (arg_node) {
+            args_fixity.push(arg_node);
             args.push(arg_node); }
           else {
             args.push("missing_arg:" + arg_val); } }
       };
       if (args.length > 1) {
-        args = [args]; }
-      pieces = []; }
+        args = [args];
+        }
+      }
     if (args.length == 1 && Array.isArray(args[0])) {
       args = args[0]; }
     // now that we have all arg nodes, figure out the fixity of the notation
     // then narrate constituents and dispatch to this notation handler:
-    let fixity = compute_fixity(args, context);
-    if (fixity.length > 0) {
-      math.attr("data-fixity", fixity); }
+    let fixity = compute_fixity(args_fixity, context);
+    if (fixity.length > 0 && typeof args[0] == "object" ) {
+        $(args[0]).data("fixity", fixity);
+    }
     narration = narrate_by_structure(args, semantic, context, style);
   } else {
     // descend in children, assuming independence

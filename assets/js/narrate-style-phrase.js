@@ -30,19 +30,38 @@ function phrase_narrate_switch(op, arg_narrations, fixity) {
       return np_of(op,arg_narrations[0]+' d '+arg_narrations[1]);
     case 'derivative-implicit-variable':
       return infix(" derivative of ", [numeral(arg_narrations[1]), arg_narrations[0]]);
-    default:
-      switch (fixity) {
-        case 'prefix': return prefix(op, arg_narrations[0]);
-        case 'infix':
-        case 'nary-infix':
-          return infix(op, arg_narrations);
-        case 'nary-implied':
-          return np_of(op, list_and(arg_narrations));
-        case 'postfix': return postfix(op, arg_narrations[0]);
-        case 'subfix': return arg_narrations[0] + " at " + arg_narrations[1];
-        case 'superfix': return arg_narrations[0] + " to the " + arg_narrations[1];
-        case 'fenced': return np_of(op, list_and(arg_narrations));
-        default: return np_of(op, list_and(arg_narrations));
-      }
+    case 'formulae':
+      return list_conj(". Next, ",arg_narrations);
+    case 'cases':
+      // for now assume they always mean piecewise, and that the arguments are unstructured in groups of 2 columns per row
+      let pieces = [];
+      for (var i = 0; i < arg_narrations.length - 1; i += 2) {
+        let case_id = numeral(1 + i / 2);
+        pieces.push(
+          arg_narrations[i] + ' ' + arg_narrations[i + 1]
+        );  }
+      return "piece-wise . " + pieces.join(" or ") + " . end piece-wise ";
+
+    default: switch (fixity) {
+      case 'prefix': return prefix(op, arg_narrations[0]);
+      case 'infix':
+      case 'nary-infix':
+        return infix(op, arg_narrations);
+      case 'nary-implied':
+        return np_of(op, list_and(arg_narrations));
+      case 'postfix': return postfix(op, arg_narrations[0]);
+      case 'subfix': return arg_narrations[0] + " at " + arg_narrations[1];
+      case 'superfix': return arg_narrations[0] + " to the " + arg_narrations[1];
+      case 'fenced': return np_of(op, list_and(arg_narrations));
+      default:
+        switch (op) { // only needed if fixity is wrong, which for now happens in deep tabular/aligned setups
+          case 'times':
+          case 'plus':
+          case 'equals':
+            return infix(op, arg_narrations);
+          default:
+            return np_of(op, list_and(arg_narrations));
+        }
+    }
   }
 }

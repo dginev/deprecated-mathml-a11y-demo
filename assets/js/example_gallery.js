@@ -48,5 +48,26 @@ let example_gallery = [
   { value: 'sup-adjoint', data: {tex: '\\adjoint{A}', category:'mini-spec'}},
   { value: 'sup-transpose', data: {tex: '\\transpose{A}', category:'mini-spec'}},
   { value: 'unary minus', data: {tex: '-a', category:'mini-spec'}},
-  { value: 'integral', data: {tex: "\\integral{f(x)}{x}", category:'semantic macro'}}
+  { value: 'integral', data: {tex: "\\integral{f(x)}{x}", category:'semantic macro'}},
+  { value: 'piecewise raw', data: {tex: "\\defeq{|x|}{\\begin{cases}-x & \\text{ if }x<0 \\\\ x & \\text{ otherwise} \\end{cases}}",
+    category:'alignments'}},
+  // { value: 'piecewise semantic', data: {
+  //   tex: "\\defeq{|x|}{\\piecewisedemo{-x}{\\text{ if }{x<0}}{x}{\\text{ otherwise}}",
+  //     category: 'alignments'
+  // }},
+  {
+    value: 'equation, split at operator', data: {
+      tex: ["\\begin{eqndemo}", "a &=& b + c - d\\\\", " & & + e - f\\\\", "\\end{eqndemo}"].join("\n"),
+      category: 'alignments'
+    }
+  },
+  {
+    value: 'equations, tabulated list', data: {
+      tex: ["\\begin{eqndemo}", "2x &=& 1\\\\", " y &>& x-3\\\\", "\\end{eqndemo}"].join("\n"),
+      category: 'alignments'
+    }
+  },
+  {value: 'equations, mixed alignments', data: {
+    tex:["\\begin{eqndemo}","a &=& b + c - d\\\\"," & & + e - f\\\\","A &=& B + C","\\end{eqndemo}"].join("\n"),
+    category: 'alignments' }}
 ];
