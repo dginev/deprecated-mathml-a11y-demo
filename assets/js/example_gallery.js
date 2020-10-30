@@ -57,7 +57,7 @@ let example_gallery = [
   // }},
   {
     value: 'equation, split at operator', data: {
-      tex: ["\\begin{eqndemo}", "a &=& b + c - d\\\\", " & & + e - f\\\\", "\\end{eqndemo}"].join("\n"),
+      tex: ["\\begin{eqndemo}", "a &=& b + c - d\\\\", " & & {} + e - f\\\\", "\\end{eqndemo}"].join("\n"),
       category: 'alignments'
     }
   },
@@ -68,6 +68,6 @@ let example_gallery = [
     }
   },
   {value: 'equations, mixed alignments', data: {
-    tex:["\\begin{eqndemo}","a &=& b + c - d\\\\"," & & + e - f\\\\","A &=& B + C","\\end{eqndemo}"].join("\n"),
+    tex:["\\begin{eqndemo}","a &=& b + c - d\\\\"," & & {} + e - f\\\\","A &=& B + C","\\end{eqndemo}"].join("\n"),
     category: 'alignments' }}
 ];
