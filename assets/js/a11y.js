@@ -102,12 +102,12 @@ function handle_input(tex) {
       el.removeAttribute('data-arg-path'); });
     let pretty = $('<code/>', { 'class': "xml" });
     pretty.text(mathml.html().replace(leading_newline, ''));
-    $("tbody tr:last").before(
+    $("table:not([class]):first tbody tr:last").before(
       '<tr><td class="w30 xlarge">' + mathml[0].outerHTML +
       "</td><td class='w35'>" + '<pre>' + pretty[0].outerHTML + "</pre></td><td class='w35 narration'>" +
       narration_html + '</td></tr>');
 
-    let code_tr = $("tbody tr:last").prev();
+    let code_tr = $("table:not([class]):first tbody tr:last").prev();
     block = $(code_tr).find("pre code");
     hljs.highlightBlock(block[0]);
     if (a11y_mode == 'cmml') {
@@ -120,7 +120,7 @@ function handle_input(tex) {
     }, function () {
       $(this).find('span.remove-tr').css('display', 'none');
     });
-    $('table').on('click', 'span.remove-tr', function () {
+    $('table:not([class])').on('click', 'span.remove-tr', function () {
       $(this).closest('tr').remove();
     });
     $("html, body").animate({ scrollTop: $(document).height() }, "slow");
@@ -156,7 +156,7 @@ $(document).ready(function () {
   });
   let autocomplete_element = '<input type="text" name="auto-example" placeholder="Search examples" id="autocomplete-example"/>';
   let select_element = '<select id="example_select" name="example">'+options+'</select>';
-  $("tbody tr:last").replaceWith('<tr class="choice"><td class="w30">Examples</td><td class="w35">' + autocomplete_element + '<span>&nbsp;</span>' + select_element +
+  $("table:not([class]):first tbody tr:last").replaceWith('<tr class="choice"><td class="w30">Examples</td><td class="w35">' + autocomplete_element + '<span>&nbsp;</span>' + select_element +
     '<input type="submit" id="reset_table" value="clear all"></td><td><span id="raw-tex"></span>'+'</td></tr>');
 
   $("#example_select").change(function() {
@@ -208,6 +208,54 @@ $(document).ready(function () {
   // cleanup UI
   $("input#reset_table").click(function (e) {
     e.preventDefault();
-    $("tbody tr:not(:last)").remove();
+    $("table:not([class]):first tbody tr:not(:last)").remove();
   });
+
+  // allow tweaking spec languge
+  $("form#spec-explorer :text").change(function () {
+    // always start from the original LaTeXML mathml, and regenerate all 3 variants
+    // of the accessibility spec, to stay consistent.
+    let main_attr_target = $("input#a11y-main-attribute").data('default');
+    let secondary_attr_target = $("input#a11y-secondary-attribute").data('default');
+    let sigil_target = $("input#a11y-arg-sigil").data('default');
+    let new_main_attr_name = $("input#a11y-main-attribute").val();
+    let new_scnd_attr_name = $("input#a11y-secondary-attribute").val();
+    let new_sigil_val = $("input#a11y-arg-sigil").val();
+
+    $('code.hljs').each(function (index, this_code) {
+      let mathml = $(this_code).closest('td').prev().find('math:first').clone();
+      if (main_attr_target != new_main_attr_name || (sigil_target != new_sigil_val)) {
+        mathml.find('*[' + main_attr_target + ']').each(function(index, node) {
+          let attr_val = $(node).attr(main_attr_target);
+          if (sigil_target != new_sigil_val) {
+            attr_val = attr_val.replaceAll(sigil_target, new_sigil_val);
+          }
+          $(node).attr(new_main_attr_name, attr_val);
+          if (main_attr_target != new_main_attr_name) {
+            $(node).removeAttr(main_attr_target);
+          }
+        });
+      }
+      if (secondary_attr_target != new_scnd_attr_name) {
+        mathml.find('*[' + secondary_attr_target + ']').each(function (index, node) {
+          $(node).attr(new_scnd_attr_name, $(node).attr(secondary_attr_target))
+            .removeAttr(secondary_attr_target);
+        });
+      }
+      let new_hljs = $('<code/>', { 'class': "xml" });
+      new_hljs.text(mathml.html().replace(leading_newline, ''));
+      $(this_code).removeAttr('hljs');
+      let this_pre = $(this_code).parent();
+      $(this_code).remove();
+      this_pre.append(new_hljs);
+      let replaced = this_pre.children('code').first();
+      hljs.highlightBlock(replaced[0]);
+      replaced.addClass('hljs');
+    });
+  });
+
 });
+
+function tweak_spec() {
+  $('form#spec-explorer').toggle();
+}

@@ -89,6 +89,29 @@ div.wrapper-modified {
     height: 20px;
   }
 
+  form#spec-explorer {
+    display: none;
+  }
+  table.mini-form {
+    thead {
+      visibility:visible;
+      th {
+        padding: 0px;
+        border-bottom: none;
+      }
+    }
+    max-width: 150px;
+    td {
+      font-size: small;
+      padding: 0px;
+      vertical-align: top;
+      border-bottom: none;
+    }
+    input {
+      width: 50px;
+    }
+  }
+
   /* Style the collapsible content. Note: hidden by default */
   #preamble {
     padding: 0 18px;
