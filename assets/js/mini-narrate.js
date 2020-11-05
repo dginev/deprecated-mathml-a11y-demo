@@ -155,9 +155,9 @@ function narrate(math, style) {
   let narration = narrate_semantic(math, style, semantic);
   // special global tricks for mozilla/TTS pronunciations
   // const spaced_letter = /(?:^| )([a-z])\W/gi;
-  const spaced_letter = /(?:^| )(a)(?: |$)/gi;
+  const spaced_letter = /(?:^| )(a)([^-,\d\p{L}])/gui;
   // only replace aA for now, since internal errors in TTS can be hit with too many double-quotes
-  return narration.replace(spaced_letter, " $1,"); }
+  return narration.replace(spaced_letter, " $1,$2"); }
 
 function narrate_semantic(math, style, semantic) {
   let context = math[0];
