@@ -72,7 +72,7 @@ function the_np(op,arg) {
   if (arg.indexOf(' ') > 0) {
     // always terminate with end-concept when the argument has a space,
     // i.e. for phrases and complex subtrees
-    return the_concept + " of " + arg + " "+end_concept; }
+    return the_concept + " of " + arg + " . "+end_concept; }
   else {
     // however, in a simple case such as "the absolute-value of x",
     // we can omit the ending phrase
@@ -88,7 +88,7 @@ function the_np_from_to(op, args) {
   let space_idx = end_concept.indexOf(' ');
   if (space_idx > 0) {
     end_concept = end_concept.slice(0, space_idx); }
-  return "the " + concept + " from " + args[0] + " to "+args[1]+" "+end_concept;
+  return "the " + concept + " from " + args[0] + " to "+args[1]+" . "+end_concept;
 }
 function modified_n(op, arg) { // for things like transpose maybe?
   return arg+" "+op+"-ed"; }

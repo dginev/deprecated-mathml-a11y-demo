@@ -42,7 +42,7 @@ function phrase_narrate_switch(op, arg_narrations, fixity) {
         pieces.push(
           arg_narrations[i] + ' ' + arg_narrations[i + 1]
         );  }
-      return "piece-wise . " + pieces.join(" or ") + " . end piece-wise ";
+      return "piece-wise . " + pieces.join(" or ") + " . end-piece-wise ";
 
     default: switch (fixity) {
       case 'prefix': return prefix(op, arg_narrations[0]);
