@@ -32,6 +32,8 @@ function phrase_narrate_switch(op, arg_narrations, fixity) {
       return infix(" derivative of ", [numeral(arg_narrations[1]), arg_narrations[0]]);
     case 'formulae':
       return list_conj(". Next, ",arg_narrations);
+    case 'if':
+      return 'if ' + list_and(arg_narrations);
     case 'cases':
       // for now assume they always mean piecewise, and that the arguments are unstructured in groups of 2 columns per row
       let pieces = [];

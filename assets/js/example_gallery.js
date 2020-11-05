@@ -49,7 +49,9 @@ let example_gallery = [
   { value: 'sup-transpose', data: {tex: '\\transpose{A}', category:'mini-spec'}},
   { value: 'unary minus', data: {tex: '-a', category:'mini-spec'}},
   { value: 'integral', data: {tex: "\\integral{f(x)}{x}", category:'semantic macro'}},
-  { value: 'piecewise raw', data: {tex: "\\defeq{|x|}{\\begin{cases}-x & \\text{ if }x<0 \\\\ x & \\text{ otherwise} \\end{cases}}",
+  {
+    value: 'piecewise raw', data: {
+      tex: "\\defeq{|x|}{\\begin{cases}-x & \\mathbin{\\text{ if }}x<0 \\\\ x & \\text{ otherwise} \\end{cases}}",
     category:'alignments'}},
   // { value: 'piecewise semantic', data: {
   //   tex: "\\defeq{|x|}{\\piecewisedemo{-x}{\\text{ if }{x<0}}{x}{\\text{ otherwise}}",

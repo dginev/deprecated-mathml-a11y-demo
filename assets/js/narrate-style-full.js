@@ -43,6 +43,8 @@ function default_narrate_switch(op, arg_narrations, fixity) {
       return the_np(op, arg_narrations[0] + ' d ' + arg_narrations[1]);
     case 'derivative-implicit-variable':
       return infix(" derivative of ", [numeral(arg_narrations[1]), arg_narrations[0]]);
+    case 'if':
+      return 'if ' + list_and(arg_narrations);
     case 'formulae':
       let enumerated_formulae = '';
       $.each(arg_narrations, function (index, value) {
@@ -59,7 +61,7 @@ function default_narrate_switch(op, arg_narrations, fixity) {
           "start-"+case_id+"-case . "+arg_narrations[i] + ' ' + arg_narrations[i + 1] +
           " . end-" + case_id + "-case . "
         ); }
-      return "piece-wise function . " + pieces.join(" ");
+      return "a-piece-wise function . " + pieces.join(" ");
     default:
       switch (fixity) {
         case 'prefix': return np_of(op, arg_narrations[0]);

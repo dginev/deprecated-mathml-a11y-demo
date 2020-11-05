@@ -53,7 +53,11 @@ function numeral(s) {
 
 // np = noun phrase
 function np_of(op, arg) {
-  return op + " of " + arg; }
+  let op_word = prefix_op_word(op);
+  if (op_word == op) {
+    return  op + " of " + arg; }
+  else {
+    return op_word + " " + arg;  } }
 function the_np(op,arg) {
   let concept = infix_op_result_word(op);
   let the_concept = concept;
@@ -65,7 +69,14 @@ function the_np(op,arg) {
   let space_idx = end_concept.indexOf(' ');
   if (space_idx > 0) {
     end_concept = end_concept.slice(0, space_idx); }
-  return the_concept + " of " + arg + " "+end_concept; }
+  if (arg.indexOf(' ') > 0) {
+    // always terminate with end-concept when the argument has a space,
+    // i.e. for phrases and complex subtrees
+    return the_concept + " of " + arg + " "+end_concept; }
+  else {
+    // however, in a simple case such as "the absolute-value of x",
+    // we can omit the ending phrase
+    return the_concept + " of " + arg; } }
 function the_np_from_to(op, args) {
   let concept = infix_op_result_word(op);
   let the_concept = concept;
@@ -117,6 +128,7 @@ function narrate_symbol(textsymbol) {
   }
 }
 function narrate_by_table(op, arg_narrations, style, fixity) {
+  op = op.trim();
   switch(style) {
     case 'annotation':
       if (!op || op.length == 0 || op == 'math' || op =='mrow') {
