@@ -1,0 +1,45 @@
+<!doctype html>
+<html><head>
+  <title>RDFa with schema.org without MathML, first experiment</title>
+  <meta description="Experimenting with schema.org's disambiguatingDescription and Thing">
+  <script type="application/ld+json">
+  [
+    {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "headline": "Introduction to schema.org for MathML (an experiment)",
+    "description": "Experimenting with schema.org's disambiguatingDescription and Thing",
+    "genre": "Quantum Mechanics",
+    "provider": {
+      "@type": "Organization",
+      "name": "University of Technology - Eureka",
+      "sameAs": "http://www.ut-eureka.edu"
+    }},
+    {
+    "@context": "https://schema.org",
+    "@type": "Thing",
+    "@id": "#f",
+    "name": "f",
+    "disambiguatingDescription": "elliptic-function twice-differentiable"
+    },
+    {
+    "@context": "https://schema.org",
+    "@type": "Thing",
+    "@id": "#hbar",
+    "name": "reduced-planck-constant",
+    "disambiguatingDescription": "2019-SI-value"
+    }
+  ]
+  </script>
+
+</head><body>
+
+<h2>Math</h2>
+
+Take <math><mi id="f">f</mi></math>, as before, and use it to derive...etc.<br>
+
+<h2>Physics</h2>
+
+And a newer use of the canonical in physics <math><mi id="hbar">ℏ</mi></math>.
+
+</body></html>

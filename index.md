@@ -64,3 +64,5 @@ Rendered | MathML [4?](https://www.w3.org/community/mathml4/) [tweak?](javascrip
 </form>
 
 <div class="latexml-log"></div>
+
+01.2021 mini experiment, four pages with RDFa annotations for formula properties: [RDFa, no MathML](/schema_experiment_1.html), [RDFa+MathML](/schema_experiment_2.html), [JSON-LD, no MathML](/schema_experiment_4.html), [JSON-LD +MathML](/schema_experiment_3.html).
