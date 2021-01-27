@@ -129,6 +129,7 @@ function narrate_symbol(textsymbol) {
 }
 function narrate_by_table(op, arg_narrations, style, fixity) {
   op = op.trim();
+  let known_op = IntentDB[op];
   switch(style) {
     case 'annotation':
       if (!op || op.length == 0 || op == 'math' || op =='mrow') {
@@ -137,12 +138,22 @@ function narrate_by_table(op, arg_narrations, style, fixity) {
         return op+"("+arg_narrations.join(", ")+")";
       }
     case 'phrase':
-      if (op.startsWith('delimited-')) {
+      if (known_op && known_op["speech_hint"]) {
+        // TODO: more can be done matching up "fixity"
+        //       with known_op["fixity"], etc.
+        let hints = known_op["speech_hint"];
+        return known_speech_pattern(hints[1]||hints[0], arg_narrations)
+      } else if (op.startsWith('delimited-')) {
         return list_and(arg_narrations);
       }
       return phrase_narrate_switch(op, arg_narrations, fixity);
     default:
-      if (op.startsWith('delimited-')) {
+      if (known_op && known_op["speech_hint"]) {
+        // TODO: more can be done matching up "fixity"
+        //       with known_op["fixity"], etc.
+        let hints = known_op["speech_hint"];
+        return known_speech_pattern(hints[0], arg_narrations);
+      } else if (op.startsWith('delimited-')) {
         return list_and(arg_narrations);
       }
       return default_narrate_switch(op, arg_narrations, fixity);
@@ -172,3 +183,9 @@ function narrate_by_structure(args, semantic, context, style) {
   else {
     narration = 'failed_to_narrate:(' + semantic + ')';  }
   return narration; }
+
+function known_speech_pattern(pattern, args) {
+  return pattern.replace(/\$\d/gi, function (argid) {
+    return args[parseInt(argid[1])-1]||"missing"
+  });
+}
