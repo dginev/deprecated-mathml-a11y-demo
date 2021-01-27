@@ -12,7 +12,7 @@ layout: default
   <td>
     <label for="a11y-main-attribute">main attr.</label></td>
   <td>
-    <input id='a11y-main-attribute' name='main-attribute' data-default="alt" value="alt" type='text'>
+    <input id='a11y-main-attribute' name='main-attribute' data-default="intent" value="intent" type='text'>
   </td>
 </tr><tr>
   <td>
