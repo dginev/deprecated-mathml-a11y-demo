@@ -67,10 +67,4 @@ Rendered | MathML [4?](https://www.w3.org/community/mathml4/) [tweak?](javascrip
 
 ---
 
-**01.2021 mini experiment:** four pages with RDFa annotations for formula properties
-  1. [RDFa, no MathML](/schema_experiment_1.html)
-  2. [RDFa+MathML](/schema_experiment_2.html),<br>
-  3. [JSON-LD, no MathML](/schema_experiment_4.html),
-  4. [JSON-LD +MathML](/schema_experiment_3.html).
-
----
+<button id="authorize_button">Fetch MathML Intent List</button>

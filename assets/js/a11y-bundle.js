@@ -1,5 +1,7 @@
 ---
 ---
+{% include_relative gsheets.js %}
+
 {%include_relative jquery-3.5.1.min.js %}
 
 {%include_relative jquery.autocomplete.min.js %}
