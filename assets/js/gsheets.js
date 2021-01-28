@@ -64,7 +64,8 @@ function fetchIntentList() {
     if (range.values.length > 0) {
       for (i = 0; i < range.values.length; i++) {
         var row = range.values[i];
-        var hints = row[3].split("\n").sort();
+        var hints = row[3].split("\n").filter(function (e) { return e })
+          .sort().reverse(); // longest is first, since that's our default
 
         if (row[0] && row[0].length > 0) {
           last_fixity = row[0]; }
