@@ -40,16 +40,28 @@ Rendered | MathML [4?](https://www.w3.org/community/mathml4/) [tweak?](javascrip
 
 <form id='conversion-form' spellcheck="false">
 <textarea id='preamble' name='preamble' rows="10">
-\pragma{FUNCTION}{f,g,h}
-\pragma{ID}{a,b,c,d,n,m,x,y,z}
+% 28.01.2021 Demo examples:
+% \angle (x,y)=\arccos {\frac {\langle x,y\rangle }{\|x\|\,\|y\|}},
+%
+%\pragma{non-oriented-angle,FUNCTION}{\angle}
+%\pragma*{inner-product}{\langle ? , ? \rangle}
+%
+% O_n (B)
+%
+% \pragma{multiplicative-order}{O_? (?)}
+%
+%
+% %%% Older:
+%\pragma{FUNCTION}{f,g,h}
+%\pragma{ID}{a,b,c,d,n,m,x,y,z}
 %\pragma{index}{?_?}
 % \pragma{power}{?^?}
-\pragma{Pochhamer-symbol,ID}{\left(?\right)_?}
-\pragma{Legendre-symbol,ID}{\left(?|?\right)}
-\pragma{BesselJ,FUNCTION}{J_?}
-\pragma*{inner-product,ID}{\left<\mathbf{?},\mathbf{?}\right>}
-\pragma*{inner-product,ID}{\mathbf{?}\cdot\mathbf{?}}
-\pragma*{pre:\@APPLYFUNCTION}{\left(?,?;?|?\right)}
+%\pragma{Pochhamer-symbol,ID}{\left(?\right)_?}
+%\pragma{Legendre-symbol,ID}{\left(?|?\right)}
+%\pragma{BesselJ,FUNCTION}{J_?}
+%\pragma*{inner-product,ID}{\left<\mathbf{?},\mathbf{?}\right>}
+%\pragma*{inner-product,ID}{\mathbf{?}\cdot\mathbf{?}}
+%\pragma*{pre:\@APPLYFUNCTION}{\left(?,?;?|?\right)}
 </textarea>
 
 <input id='freetex' name='formula' placeholder="type any TeX math" type='text'><input type="submit" value="convert...">
