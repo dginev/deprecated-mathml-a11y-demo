@@ -31,7 +31,7 @@ function initClient() {
   }).then(function () {
     handleAuthClick(); // sign in on init
     authorizeButton.onclick = handleAuthClick;
-  }, function(error) {
+  }, function (error) {
     console.log(JSON.stringify(error, null, 2));
   });
 }
@@ -55,10 +55,11 @@ function handleAuthClick(event) {
   */
 var IntentDB = {};
 function fetchIntentList() {
+  return; // DISABLE until we finish migrating to a more permanent home for the list.
   gapi.client.sheets.spreadsheets.values.get({
     spreadsheetId: '1EsWou1K5nxBdLPvQapdoA9h-s8lg_qjn8fJH64g9izQ',
     range: 'Level 3 Speakable!A2:D',
-  }).then(function(response) {
+  }).then(function (response) {
     var range = response.result;
     var last_fixity = "";
     if (range.values.length > 0) {
@@ -68,7 +69,8 @@ function fetchIntentList() {
           .sort().reverse(); // longest is first, since that's our default
 
         if (row[0] && row[0].length > 0) {
-          last_fixity = row[0]; }
+          last_fixity = row[0];
+        }
         IntentDB[row[1]] = {
           fixity: last_fixity,
           notation: row[2],
@@ -77,7 +79,7 @@ function fetchIntentList() {
       }
     }
     console.log(IntentDB);
-  }, function(response) {
+  }, function (response) {
     console.log('Error: ' + response.result.error.message);
   });
 }

@@ -1,46 +1,49 @@
 <!DOCTYPE html>
 <html lang="en-US">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% if site.github.is_project_page %}
-    <base href="/tiny-mathml-a11y-demo/">
-    {% endif %}
-{% seo %}
-    <link rel="stylesheet" href="{{ "/assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
-    <link rel="stylesheet" title="Github Gist" href="https://highlightjs.org/static/demo/styles/github-gist.css">
-    <!--[if lt IE 9]>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% if site.github.is_project_page %}
+  <base href="/tiny-mathml-a11y-demo/">
+  {% endif %}
+  {% seo %}
+  <link rel="stylesheet" href="{{ " /assets/css/style.css?v=" | append: site.github.build_revision | relative_url }}">
+  <link rel="stylesheet" title="Github Gist" href="https://highlightjs.org/static/demo/styles/github-gist.css">
+  <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper wrapper-modified">
-      <section>
-      {{ content }}
-      </section>
-      <footer>
-        <p>{{ site.description | default: site.github.project_tagline }}</p>
+</head>
 
-        {% if site.github.is_project_page %}
-        <p class="view"><a href="{{ site.github.repository_url }}">View the Project on GitHub
-            <small>{{ site.github.repository_nwo }}</small></a></p>
-        {% endif %}
-        <br>SRE narration samples via <a href="https://github.com/zorkow/speech-rule-engine">zorkow/speech-rule-engine</a>
-        <br>Audio samples via
-        <a href="https://github.com/mozilla/TTS">mozilla/TTS, Tacotron 2 + Forward Attention + PWGAN</a>
-      </footer>
-    </div>
-    <script type="text/x-sre-config">
+<body>
+  <div class="wrapper wrapper-modified">
+    <section>
+      {{ content }}
+    </section>
+    <footer>
+      <p>{{ site.description | default: site.github.project_tagline }}</p>
+
+      {% if site.github.is_project_page %}
+      <p class="view"><a href="{{ site.github.repository_url }}">View the Project on GitHub
+          <small>{{ site.github.repository_nwo }}</small></a></p>
+      {% endif %}
+      <br>SRE narration samples via <a href="https://github.com/zorkow/speech-rule-engine">zorkow/speech-rule-engine</a>
+      <br>Audio samples via
+      <a href="https://github.com/mozilla/TTS">mozilla/TTS, Tacotron 2 + Forward Attention + PWGAN</a>
+    </footer>
+  </div>
+  <script type="text/x-sre-config">
     {
       "domain": "clearspeak",
       "style": "default"
     }
     </script>
-    <script src="assets/js/a11y-bundle.js"></script>
-    <script async defer src="https://apis.google.com/js/api.js"
+  <script src="assets/js/a11y-bundle.js"></script>
+  <!-- <script async defer src="https://apis.google.com/js/api.js"
     onload="this.onload=function(){};handleClientLoad()"
     onreadystatechange="if (this.readyState === 'complete') this.onload()">
-    </script>
-  </body>
+    </script> -->
+</body>
+
 </html>
