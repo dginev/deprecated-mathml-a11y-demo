@@ -1,8 +1,8 @@
-# Tiny demo for MathML Accessibility
+# Deprecated: Tiny demo for MathML Accessibility
 
-Early alpha stage.
+**Obsolete**: This demo accompanied brainstorming work buy the MathML Refresh CG in 2020-2021 and the Math WG in 2021-2022. It is now obsolete and remains online solely for archival purposes.
 
-Live demo at: https://dginev.github.io/tiny-mathml-a11y-demo
+Demo is now defunct, was at: https://dginev.github.io/tiny-mathml-a11y-demo
 
 Method:
  - obtain presentation MathML with accessibility annotations from a TeX formula, via the experimental [LaTeXML accessibility branch](https://github.com/brucemiller/LaTeXML/pull/1305)
